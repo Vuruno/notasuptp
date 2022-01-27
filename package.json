@@ -24,7 +24,8 @@
     "mongoose": "^6.1.6",
     "mongoose-findorcreate": "^3.0.0",
     "passport": "^0.5.2",
-    "passport-google-oauth2": "^0.2.0"
+    "passport-google-oauth2": "^0.2.0",
+    "passport-remember-me": "^0.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

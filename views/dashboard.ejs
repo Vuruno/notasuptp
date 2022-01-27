@@ -1,6 +1,6 @@
-<div class="row text-center my-5">
+<div class="row row-cols-lg-4 row-cols-sm-2 row-cols-md-2 text-center my-5">
     <% user.enrolled.forEach ( function (index) { %>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header">
                     <a href="/account/course/<%= index.id %>" class="text-decoration-none text-reset"> <%= index.subject %> </a>
@@ -70,7 +70,7 @@
         </div>
         <% }) %>
 
-            <div class="col-3">
+            <div class="col">
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">
                         <br>

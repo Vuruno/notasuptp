@@ -6,7 +6,8 @@
         <a href="/account/grupal/<%= subject._id %>" class="btn btn-sm btn-secondary">
             Grupal
         </a>
-        <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'" onmouseout="set(this)" class="btn btn-sm btn-outline-primary">
+        <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'"
+            onmouseout="set(this)" class="btn btn-sm btn-outline-primary">
             <i class="fas fa-link"></i> link
         </div>
 </h1>
@@ -256,6 +257,7 @@
             const FINAL = document.getElementById('grade_final')
             const GRADE = document.getElementById('grade_total')
             validate(FINAL, 100)
+            if (GRADE.value == '') GRADE.classList.remove('is-valid')
 
             function getTotal() {
                 // ADD FINAL
@@ -367,5 +369,5 @@
                 }
             }
 
-            function set(that) {that.innerHTML = '<i class="fas fa-link"></i> link' }
+            function set(that) { that.innerHTML = '<i class="fas fa-link"></i> link' }
         </script>
