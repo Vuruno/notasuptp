@@ -1,0 +1,131 @@
+<div class="row justify-content-md-center">
+    <div class="page header my-3 text-center">
+        <h1> <%= user.name.givenName %>
+                <%= user.name.familyName %>'s
+                Grades
+        </h1>
+    </div>
+    <div class="col-lg-8 table-responsive-md text-center" id="grades">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th> Subject </th>
+                    <th> FIN </th>
+                    <th> MID </th>
+                    <th> HW </th>
+                    <th> LA </th>
+                    <th> ATT </th>
+                    <th> +BON </th>
+                    <th> Grade </th>
+                    <th> Int. </th>
+                    <th> Mec </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% var arrGrades=[], arrMec=[] %>
+                    <% for (subject of allSubjects) { %>
+                        <tr>
+                            <th>
+                                <%= subject.subject %>
+                            </th>
+                            <% var totalgrade=0 %>
+                                <% for (item of subject.items) { if(item.percentage !=null){%>
+                                    <td>
+                                        <% let total=0 %>
+                                            <% let grade=0 %>
+                                                <% for(each of item.data) { %>
+                                                    <% for (usergrade of each.grades) { if (usergrade.user==user._id) {
+                                                        grade=grade + usergrade.grade }}%>
+                                                        <% total=total + Number(each.total) %>
+                                                            <% } %>
+                                                                <%= Math.round(grade*item.percentage/total) %>/
+                                                                    <%= item.percentage %>
+                                    </td>
+                                    <% totalgrade=totalgrade + (( grade / total) * item.percentage ); %>
+                                        <% } else { %>
+                                            <td></td>
+                                            <%} } arrGrades.push(Math.round(totalgrade)); %>
+                                                <th>
+                                                    <%= Math.round(totalgrade) %>
+                                                </th>
+                                                <th>
+                                                    <% if (Math.round(totalgrade)>= 92) { %>
+                                                        A+
+                                                        <% } else if (Math.round(totalgrade)>= 85) { %>
+                                                            A
+                                                            <% } else if (Math.round(totalgrade)>= 77) { %>
+                                                                B+
+                                                                <% } else if (Math.round(totalgrade)>= 71) { %>
+                                                                    B
+                                                                    <% } else if (Math.round(totalgrade)>= 66) { %>
+                                                                        C+
+                                                                        <% } else if (Math.round(totalgrade)>= 60) { %>
+                                                                            C
+                                                                            <% } else { %>
+                                                                                D
+                                                                                <% } %>
+                                                </th>
+                                                <th>
+                                                    <% if (Math.round(totalgrade)>= 92) { arrMec.push(5); %>
+                                                        5
+                                                        <% } else if (Math.round(totalgrade)>= 85) { arrMec.push(4); %>
+                                                            4
+                                                            <% } else if (Math.round(totalgrade)>= 77) {
+                                                                arrMec.push(3.7); %>
+                                                                3.7
+                                                                <% } else if (Math.round(totalgrade)>= 71) {
+                                                                    arrMec.push(3); %>
+                                                                    3
+                                                                    <% } else if (Math.round(totalgrade)>= 66) {
+                                                                        arrMec.push(2.7); %>
+                                                                        2.7
+                                                                        <% } else if (Math.round(totalgrade)>= 60) {
+                                                                            arrMec.push(2); %>
+                                                                            2
+                                                                            <% } else { arrMec.push(1); %>
+                                                                                1
+                                                                                <% } %>
+                                                </th>
+                        </tr>
+                        <% } %>
+                            <tr>
+                                <th> Average </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <th>
+                                    <%= (arrGrades.reduce((a, b)=> a + b) / arrGrades.length).toFixed(2) %>
+                                </th>
+                                <th>
+                                    <% if ( Math.round(arrGrades.reduce((a, b)=> a + b) / arrGrades.length) >= 92) { %>
+                                        A+
+                                        <% } else if (Math.round(arrGrades.reduce((a, b)=> a + b) / arrGrades.length) >=
+                                            85) { %>
+                                            A
+                                            <% } else if (Math.round(arrGrades.reduce((a, b)=> a + b) /
+                                                arrGrades.length) >= 77) { %>
+                                                B+
+                                                <% } else if (Math.round(arrGrades.reduce((a, b)=> a + b) /
+                                                    arrGrades.length) >= 71) { %>
+                                                    B
+                                                    <% } else if (Math.round(arrGrades.reduce((a, b)=> a + b) /
+                                                        arrGrades.length) >= 66) { %>
+                                                        C+
+                                                        <% } else if (Math.round(arrGrades.reduce((a, b)=> a + b) /
+                                                            arrGrades.length) >= 60) { %>
+                                                            C
+                                                            <% } else { %>
+                                                                D
+                                                                <% } %>
+                                </th>
+                                <th>
+                                    <%= (arrMec.reduce((a, b)=> a + b) / arrMec.length).toFixed(2) %>
+                                </th>
+                            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

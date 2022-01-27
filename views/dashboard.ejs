@@ -1,0 +1,90 @@
+<div class="row text-center my-5">
+    <% user.enrolled.forEach ( function (index) { %>
+        <div class="col-3">
+            <div class="card text-white bg-dark mb-3">
+                <div class="card-header">
+                    <a href="/account/course/<%= index.id %>" class="text-decoration-none text-reset"> <%= index.subject %> </a>
+                </div>
+                <div class="card-body px-0 py-1">
+                    <div class="card-text">
+                        <table class="table m-0 ">
+                            <tbody>
+                                <% for (x of allSubjects) { if (x._id==index.id) { var subject=x} }%>
+                                    <% let totalgrade=0 %>
+                                        <% for (item of subject.items) { if(item.percentage !=null) {%>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%= item.item.split(' ')[0].slice(0,3) %>.
+                                                    <% if(item.item.split(' ')[1]) {%>
+                                                    <%= item.item.split(' ')[1].slice(0,1) %>
+                                                    <% } %>
+                                                </th>
+                                                <td>
+                                                <% let total = 0 %>
+                                                <% let grade = 0 %>
+                                                <% for(each of item.data) { %>
+                                                    <% for (usergrade of each.grades) { if (usergrade.user == user._id) { grade = grade + usergrade.grade }}%>
+                                                    <% total = total + Number(each.total) %>
+                                                <% } %>
+                                                <%= grade %>/<%= total %>
+                                                </td>
+                                                <td>
+                                                <%= item.percentage %>%
+                                                </td>
+                                                <% totalgrade = totalgrade + (( grade / total) * item.percentage ) %>
+                                            </tr>
+                                        <% } } %>
+                                        <tr class="text-primary">
+                                            <th scope="row">
+                                                Total
+                                            </th>
+                                            <th>
+                                                <%= Math.round(totalgrade) %>
+                                            </th>
+                                            <th>
+                                                <% if (Math.round(totalgrade) >= 92) { %>
+                                                    A+
+                                                <% } else if (Math.round(totalgrade) >= 85) { %>
+                                                    A
+                                                <% } else if (Math.round(totalgrade) >= 77) { %>
+                                                    B+
+                                                <% } else if (Math.round(totalgrade) >= 71) { %>
+                                                    B
+                                                <% } else if (Math.round(totalgrade) >= 66) { %>
+                                                    C+
+                                                <% } else if (Math.round(totalgrade) >= 60) { %>
+                                                    C
+                                                <% } else { %>
+                                                    D
+                                                <% } %>
+                                            </th>
+                                        </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/account/course/<%= subject._id %>" class="btn btn-outline-light py-1"> Enter </a>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+
+            <div class="col-3">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header">
+                        <br>
+                    </div>
+                    <div class="card-body text-muted">
+                        <a href="/account/courses"><i class="far fa-plus-square text-muted"
+                                style="font-size: 8em;"></i></a>
+                        <br>  Edit my enrolled subjects
+                    </div>
+                    <div class="card-footer">
+                        <br>
+                    </div>
+                </div>
+            </div>
+</div>
+
+</div>

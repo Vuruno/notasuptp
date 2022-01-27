@@ -1,0 +1,82 @@
+<div class="row text-center my-5">
+    <% allSubjects.forEach ( function (index) { var grupalAverage=[] %>
+        <div class="col-3">
+            <div class="card text-white bg-dark mb-3">
+                <div class="card-header">
+                    <a href="/account/grupal/<%= index.id %>" class="text-decoration-none text-reset">
+                        <%= index.subject %>
+                    </a>
+                </div>
+                <div class="card-body px-0 py-1">
+                    <div class="card-text">
+                        <table class="table m-0 ">
+                            <tbody>
+                                <% for (x of index.totalgrade) { if (x.grade !=null) grupalAverage.push(x.grade); %>
+                                    <% if (x.user==user._id && user.enrolled.map(function(e) { return e.id;
+                                        }).indexOf(String(index._id))> -1) { %>
+                                        <tr>
+                                            <th scope="row">
+                                                My grade
+                                            </th>
+                                            <td>
+                                                <%= Math.round(x.grade) %>
+                                            </td>
+                                            <td>
+                                                <% if (Math.round(x.grade)>= 92) { %>
+                                                    A+
+                                                    <% } else if (Math.round(x.grade)>= 85) { %>
+                                                        A
+                                                        <% } else if (Math.round(x.grade)>= 77) { %>
+                                                            B+
+                                                            <% } else if (Math.round(x.grade)>= 71) { %>
+                                                                B
+                                                                <% } else if (Math.round(x.grade)>= 66) { %>
+                                                                    C+
+                                                                    <% } else if (Math.round(x.grade)>= 60) { %>
+                                                                        C
+                                                                        <% } else { %>
+                                                                            D
+                                                                            <% } %>
+                                            </td>
+                                        </tr>
+                                        <% } } grupalAverage=(grupalAverage.reduce((a, b)=> a + b) /
+                                            grupalAverage.length)%>
+                                            <tr>
+                                                <th scope="row">
+                                                    Grupal avg.
+                                                </th>
+                                                <td>
+                                                    <%= Math.round(grupalAverage) %>
+                                                </td>
+                                                <td>
+                                                    <% if (Math.round(grupalAverage)>= 92) { %>
+                                                        A+
+                                                        <% } else if (Math.round(grupalAverage)>= 85) { %>
+                                                            A
+                                                            <% } else if (Math.round(grupalAverage)>= 77) { %>
+                                                                B+
+                                                                <% } else if (Math.round(grupalAverage)>= 71) { %>
+                                                                    B
+                                                                    <% } else if (Math.round(grupalAverage)>= 66) { %>
+                                                                        C+
+                                                                        <% } else if (Math.round(grupalAverage)>= 60) {
+                                                                            %>
+                                                                            C
+                                                                            <% } else { %>
+                                                                                D
+                                                                                <% } %>
+                                                </td>
+                                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/account/grupal/<%= index._id %>" class="btn btn-outline-light py-1"> Enter </a>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+</div>
+
+</div>

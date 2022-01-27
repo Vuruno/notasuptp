@@ -1,0 +1,271 @@
+<div class="row mt-5">
+    <div class="col"></div>
+    <div class="col-9">
+        <%- include ("./partials/messages"); %>
+            <form action="/account/updatesubject" method="post">
+                <input type="text" id="id" name="id" value="<%= typeof id != 'undefined' ? id : null %>" hidden>
+                <fieldset>
+                    <div class="row">
+                        <% if (typeof id !='undefined' ) { %>
+                            <legend> Edit a subject </legend>
+                            <span>
+                                This action modify the hole program, all the users will be able to see and modify your
+                                changes.
+                            </span>
+                            <% } else {%>
+                                <legend> Create a subject </legend>
+                                <span>
+                                    This action modify the hole program, all the users will be able to see and modify
+                                    your changes. Make sure this subjects doesn't already exists,
+                                    to avoid repeated subjects.
+                                </span>
+                                <% } %>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1" class="form-label mt-4"> Subject </label>
+                                <input type="text" class="form-control" id="subject" name="subject"
+                                    aria-describedby="emailHelp" placeholder="Physics II"
+                                    value="<%= typeof subject != 'undefined' ? subject : '' %>" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1" class="form-label mt-4"> Semester </label>
+                                <select class="form-select" id="semester" name="semester"
+                                    value="<%= typeof semester != 'undefined' ? semester : '' %>" required>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row align-self-end">
+                        <fieldset class="form-group">
+                            <legend class=""> Rubric </legend>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                            aria-orientation="vertical">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#v-final"
+                                type="button" role="tab" aria-selected="true"> Final exam </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-midterm" type="button"
+                                role="tab" aria-selected="false"> Midterm exams </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-hw" type="button"
+                                role="tab" aria-selected="false"> Homeworks </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-la" type="button"
+                                role="tab" aria-selected="false"> Learning Attitude </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-attendance" type="button"
+                                role="tab" aria-selected="false"> Attendance </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-bonus" type="button"
+                                role="tab" aria-selected="false"> Bonus points </button>
+                        </div>
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <!-- FINAL EXAM -->
+                            <div class="tab-pane fade show active" id="v-final" role="tabpanel">
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of the final
+                                        grade
+                                    </label>
+                                    <input type="number" class="form-control" id="per_final" name="per_final"
+                                        placeholder="30" required
+                                        value="<%= typeof per_final != 'undefined' ? per_final : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="form-label mt-4"> Top grade </label>
+                                    <input type="number" class="form-control" id="tot_final" name="tot_final"
+                                        placeholder="100" required
+                                        value="<%= typeof tot_final != 'undefined' ? tot_final : '' %>">
+                                </div>
+
+                            </div>
+                            <!-- MIDTERM -->
+                            <div class="tab-pane fade" id="v-midterm" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of the
+                                            midterm
+                                        </label>
+                                        <input type="number" class="form-control" id="per_midterm" name="per_midterm"
+                                            placeholder="60"
+                                            value="<%= typeof per_midterm != 'undefined' ? per_midterm : '' %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Top grades
+                                            </label>
+                                            <input type="string" class="form-control" id="tot_midterm"
+                                                name="tot_midterm" placeholder="100,100"
+                                                value="<%= typeof tot_midterm != 'undefined' ? tot_midterm : '' %>">
+                                            <small class="form-text text-muted"> Put between commas the grade of each
+                                                midterm</small>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of each
+                                                midterm
+                                            </label>
+                                            <input type="string" class="form-control" id="per_each_midterm"
+                                                name="per_each_midterm" placeholder="35,25"
+                                                value="<%= typeof per_each_midterm != 'undefined' ? per_each_midterm : '' %>">
+                                            <small class="form-text text-muted"> Left empy to each midterm worth
+                                                the same
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- HOMEWORK -->
+                            <div class="tab-pane fade" id="v-hw" role="tabpanel">
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of la nota
+                                            final
+                                        </label>
+                                        <input type="number" class="form-control" id="per_hw" name="per_hw"
+                                            placeholder="10" value="<%= typeof per_hw != 'undefined' ? per_hw : '' %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Top grades
+                                            </label>
+                                            <input type="string" class="form-control" id="tot_hw" name="tot_hw"
+                                                placeholder="20,20,20,20,25,25"
+                                                value="<%= typeof tot_hw != 'undefined' ? tot_hw : '' %>">
+                                            <small class="form-text text-muted"> Put between commas the grade of each
+                                                HW</small>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of each
+                                                midterm
+                                            </label>
+                                            <input type="string" class="form-control" id="per_each_hw"
+                                                name="per_each_hw" placeholder=""
+                                                value="<%= typeof per_each_hw != 'undefined' ? per_each_hw : '' %>">
+                                            <small class="form-text text-muted"> Left empy to each HW worth
+                                                the same
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- LEARNING ATTITUDE -->
+                            <div class="tab-pane fade" id="v-la" role="tabpanel">
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of the LA
+                                        </label>
+                                        <input type="number" class="form-control" id="per_la" name="per_la"
+                                            placeholder="" value="<%= typeof per_la != 'undefined' ? per_la : '' %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
+                                            </label>
+                                            <input type="string" class="form-control" id="tot_la" name="tot_la"
+                                                placeholder=""
+                                                value="<%= typeof tot_la != 'undefined' ? tot_la : '' %>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- ATTENDANCE -->
+                            <div class="tab-pane fade" id="v-attendance" role="tabpanel">
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of
+                                            Attendance
+                                        </label>
+                                        <input type="number" class="form-control" id="per_attendance"
+                                            name="per_attendance" placeholder=""
+                                            value="<%= typeof per_attendance != 'undefined' ? per_attendance : '' %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
+                                            </label>
+                                            <input type="string" class="form-control" id="tot_attendance"
+                                                name="tot_attendance" placeholder=""
+                                                value="<%= typeof tot_attendance != 'undefined' ? tot_attendance : '' %>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BONUS -->
+                            <div class="tab-pane fade" id="v-bonus" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1" class="form-label mt-4"> Percentage of the Bonus
+                                        </label>
+                                        <input type="number" class="form-control" id="per_bonus" name="per_bonus"
+                                            placeholder=""
+                                            value="<%= typeof per_bonus != 'undefined' ? per_bonus : '' %>">
+                                        <small class="form-text text-muted">
+                                            This Percentage is extra, and does not compound the 100 % total grade
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
+                                            </label>
+                                            <input type="string" class="form-control" id="tot_bonus" name="tot_bonus"
+                                                placeholder=""
+                                                value="<%= typeof tot_bonus != 'undefined' ? tot_bonus : '' %>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary mb-5"> Save </button>
+                        </div>
+                        <% if (typeof id !='undefined' ) { %>
+                            <div class="col align-items-end">
+                                <a href="mailto:bruno.daniel.bordon.diaz.uptp@gmail.com?subject=Solicitud de eliminación de Asignatura&body=Hola Bruno, yo soy <%= user.name.givenName %> <%= user.name.familyName %>. %0A%0APodrías eliminar la clase ' <%= subject %> ' con id ' <%= id %> '. %0A%0ALas razones son las siguientes: <explique las razones>"
+                                    class="btn btn-link mb-5"> Request removal of this subject </a>
+                            </div>
+                            <% } %>
+            </form>
+    </div>
+
+    </fieldset>
+
+</div>
+<div class="col"></div>
+</div>
+<h1></h1>

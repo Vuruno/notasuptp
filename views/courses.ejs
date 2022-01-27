@@ -1,0 +1,107 @@
+<div class="row my-5">
+  <div class="col-1"></div>
+  <div class="col">
+    <div class="card text-center bg-dark">
+      <div class="card-header">
+        Enroll in a new subject
+      </div>
+      <div class="card-body pb-0">
+        <table class="table table-hover">
+          <tbody>
+            <% subjects.forEach( function (subject) { %>
+              <% if (mySubjects.indexOf(String(subject._id)) < 0) {%>
+                <tr>
+                  <th class="text-start">
+                    <a href="/account/updatesubject:<%= subject._id %>" class="py-0 btn btn-sm btn-outline-primary">
+                      <i class="far fa-edit"></i>
+                    </a>
+                  </th>
+                  <th onclick="add('<%= subject._id %>')" onmouseover="overAdd(this)" onmouseout="out(this)">
+                    <%= subject.subject %>
+                  </th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <% } }) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-muted">
+        <a href="/account/updatesubject">
+          <div class="btn btn-link"> Create a new subject </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card text-center bg-secondary">
+      <div class="card-header">
+        Enrolled subjects
+      </div>
+      <div class="card-body pb-0">
+        <table class="table table-hover">
+          <tbody>
+            <% user.enrolled.forEach( function (subject) { %>
+              <tr class="table-secondary" href="#">
+                <th class="text-start">
+                  <a href="/account/updatesubject:<%= subject.id %>" class="py-0 btn btn-sm btn-light">
+                    <i class="far fa-edit"></i>
+                  </a>
+                </th>
+                <th onclick="remove('<%= subject.id %>')" onmouseover="overRemove(this)" onmouseout="out(this)">
+                  <%= subject.subject %>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-footer text-muted">
+        <a href="/" class="btn btn-light"> Save changes </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-1"></div>
+</div>
+
+<form action="/account/add" method="post" id="add" hidden>
+  <input type="text" name="idadd" id="idadd">
+</form>
+
+<form action="/account/remove" method="post" id="remove" hidden>
+  <input type="text" name="idremove" id="idremove">
+</form>
+
+<script>
+  function add(id) {
+    document.getElementById('idadd').value = id
+    document.getElementById('add').submit()
+  }
+
+  function remove(id) {
+    document.getElementById('idremove').value = id
+    document.getElementById('remove').submit()
+  }
+
+  function overAdd(that) {
+    document.body.style.cursor = "pointer";
+    that.innerHTML = `${that.innerText} <i class="far fa-check-square"></i>`
+  }
+
+  function overRemove(that) {
+    document.body.style.cursor = "pointer";
+    that.innerHTML = `${that.innerText} <i class="far fa-window-close"></i>`
+  }
+
+  function out(that) {
+    document.body.style.cursor = "default";
+    let text = that.innerText.slice(0, that.innerText.length)
+    that.innerHTML = text
+  }
+</script>

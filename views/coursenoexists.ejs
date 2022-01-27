@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row mt-5">
+        <hr>
+        <% if(user.name.givenName=='UPTP' ) { %>
+            <h1 class="page-header">
+            <i class="fas fa-exclamation-triangle text-warning"></i> This subject doesn't exists
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+            </h1>
+            <div class="span mb-3"> Check the subjects by <a href="/auth/google"> sign in </a></div>
+            <% } else { %>
+                <h1 class="page-header">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    This subject doesn't exists <br> or you aren't enrolled in
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                </h1>
+                <div class="span mb-3"> Go to <a href="/account/courses"> my subjects </a></div>
+                <% } %>
+                    <hr>
+    </div>
+</div>

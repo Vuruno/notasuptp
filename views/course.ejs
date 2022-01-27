@@ -1,0 +1,371 @@
+<h1 class="mb-0 mt-3">
+    <%= subject.subject %>
+        <a href="/account/updatesubject:<%= subject._id %>" class="btn btn-sm btn-outline-light">
+            <i class="far fa-edit"></i> edit
+        </a>
+        <a href="/account/grupal/<%= subject._id %>" class="btn btn-sm btn-secondary">
+            Grupal
+        </a>
+        <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'" onmouseout="set(this)" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-link"></i> link
+        </div>
+</h1>
+
+<% if (user.name.givenName=='UPTP' ) { %>
+    <div class="alert alert-dark alert-dismissible fade show mt-3" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        To save your changes <a href="/auth/signincourse<%= subject._id %>" class="alert-link"> Sign in </a>.
+        <br> You can still use the page this way
+    </div>
+    <% } %>
+
+        <form action="/account/setgrades" method="post" target="receiver" id="gradesForm">
+            <input type="text" name="id" hidden value="<%= subject._id %>">
+            <input type="number" id="value" name="value" hidden>
+            <input type="text" id="key" name="key" hidden>
+            <div class="row row-cols-auto justify-content-md-center">
+                <div class="col-lg">
+                    <!-- HW -->
+                    <% if (subject.items[2].percentage !=null ) { %>
+                        <div class="row">
+                            <div class="form-group mt-4">
+                                <div style="display: flex;">
+                                    <div class="text-primary">
+                                        <%=subject.items[2].percentage%>%
+                                    </div>
+                                    &nbsp &nbsp
+                                    <legend> Homeworks </legend>
+                                </div>
+                            </div>
+                            <div class="row row-cols-auto">
+                                <% for(i in subject.items[2].data) { %>
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" id="grade_hw<%=i%>"
+                                            name="grade_hw<%=i%>"
+                                            placeholder="__/<%= subject.items[2].data[i].total %> &nbsp HW<%= Number(i)+1 %>"
+                                            value="<% for(x of subject.items[2].data[i].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                            onfocusout="validate(this, '<%= subject.items[2].data[i].total %>')">
+                                        <div class="invalid-feedback"> must be between 0 and <%=
+                                                subject.items[2].data[i].total %>
+                                        </div>
+                                        <small class="text-muted">
+                                            <%= String(subject.items[2].data[i].percentage).slice(0, 4) %>%
+                                        </small>
+                                        <small id="per_hw<%=i%>" hidden>
+                                            <%= subject.items[2].data[i].percentage%>
+                                        </small>
+                                        <small id="tot_hw<%=i%>" hidden>
+                                            <%= subject.items[2].data[i].total %>
+                                        </small>
+                                    </div>
+                                    <% } %>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+
+                <div class="col-sm">
+                    <div class="row row-cols-auto justify-content-md-center">
+                        <!-- MIDTERM EXAM -->
+                        <div class="col">
+                            <% if (subject.items[1].percentage !=null ) { %>
+                                <div class="form-group mt-4">
+                                    <div style="display: flex;">
+                                        <div class="text-primary">
+                                            <%=subject.items[1].percentage%>%
+                                        </div>
+                                        &nbsp &nbsp
+                                        <legend>
+                                            <% if( subject.items[1].data.length==1 ) { %>
+                                                Midterm
+                                                <% } else { %>
+                                                    Midterms
+                                                    <% } %>
+                                        </legend>
+                                    </div>
+                                </div>
+                                <div class="row row-cols-auto">
+                                    <% for(i in subject.items[1].data) { %>
+                                        <div class="col-sm">
+                                            <input type="number" class="form-control" id="grade_mt<%=i%>"
+                                                name="grade_mt<%=i%>"
+                                                placeholder="__/<%= subject.items[1].data[i].total %>"
+                                                value="<% for(x of subject.items[1].data[i].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                                onfocusout="validate(this, '<%= subject.items[1].data[i].total %>')">
+                                            <div class="invalid-feedback"> must be between 0 and <%=
+                                                    subject.items[1].data[i].total %>
+                                            </div>
+                                            <small class="text-muted">
+                                                <% if( subject.items[1].data.length!=1 ) { %>
+                                                    <%= String(subject.items[1].data[i].percentage).slice(0, 4) %>
+                                                        <% } %>
+                                            </small>
+                                            <small id="per_mt<%=i%>" hidden>
+                                                <%= subject.items[1].data[i].percentage%>
+                                            </small>
+                                            <small id="tot_mt<%=i%>" hidden>
+                                                <%= subject.items[1].data[i].total %>
+                                            </small>
+                                        </div>
+                                        <% } %>
+                                </div>
+                                <% } %>
+                        </div>
+
+                        <!-- FINAL EXAM -->
+                        <div class="col">
+                            <div class="form-group mt-4">
+                                <div style="display: flex;">
+                                    <div class="text-primary">
+                                        <%=subject.items[0].percentage%>%
+                                    </div>
+                                    <div id="per_final" hidden>
+                                        <%=subject.items[0].percentage%>
+                                    </div>
+                                    <div id="tot_final" hidden>
+                                        <%=subject.items[0].data[0].total%>
+                                    </div>
+                                    &nbsp &nbsp
+                                    <legend> Final Exam </legend>
+                                </div>
+                            </div>
+                            <input type="number" class="form-control" id="grade_final" name="grade_final"
+                                placeholder="__/<%= subject.items[0].data[0].total %>"
+                                value="<% for(x of subject.items[0].data[0].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                onfocusout="validate(this, '<%= subject.items[0].data[0].total %>')">
+                            <div class="invalid-feedback"> must be between 0 and <%= subject.items[0].data[0].total %>
+                            </div>
+                        </div>
+
+                        <!-- LEARNING ATTITUDE -->
+                        <% if (subject.items[3].percentage !=null ) { %>
+                            <div class="col">
+                                <div class="form-group mt-4">
+                                    <div style="display: flex;">
+                                        <div class="text-primary">
+                                            <%=subject.items[3].percentage%>%
+                                        </div>
+                                        <div id="per_la" hidden>
+                                            <%=subject.items[3].percentage%>
+                                        </div>
+                                        <div id="tot_la" hidden>
+                                            <%=subject.items[3].data[0].total%>
+                                        </div>
+                                        &nbsp &nbsp
+                                        <legend> L. Attitude </legend>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="grade_la" name="grade_la"
+                                    placeholder="__/<%= subject.items[3].data[0].total %>"
+                                    value="<% for(x of subject.items[3].data[0].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                    onfocusout="validate(this, '<%= subject.items[3].data[0].total %>')">
+                                <div class="invalid-feedback"> must be between 0 and <%= subject.items[3].data[0].total
+                                        %>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="row row-cols-auto justify-content-md-center">
+                        <!-- ATTENDANCE -->
+                        <% if (subject.items[4].percentage !=null ) { %>
+                            <div class="col">
+                                <div class="form-group mt-4">
+                                    <div style="display: flex;">
+                                        <div class="text-primary">
+                                            <%=subject.items[4].percentage%>%
+                                        </div>
+                                        <div id="per_attendance" hidden>
+                                            <%=subject.items[4].percentage%>
+                                        </div>
+                                        <div id="tot_attendance" hidden>
+                                            <%=subject.items[4].data[0].total%>
+                                        </div>
+                                        &nbsp &nbsp
+                                        <legend> Attendace </legend>
+                                    </div>
+                                </div>
+                                <input type="number" class="form-control" id="grade_attendance" name="grade_attendance"
+                                    placeholder="__/<%= subject.items[4].data[0].total %>"
+                                    value="<% for(x of subject.items[4].data[0].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                    onfocusout="validate(this, '<%= subject.items[4].data[0].total %>')">
+                                <div class="invalid-feedback"> must be between 0 and <%= subject.items[4].data[0].total
+                                        %>
+                                </div>
+                            </div>
+                            <% } %>
+
+                                <!-- BONUS POINTS -->
+                                <% if (subject.items[5].percentage !=null ) { %>
+                                    <div class="col">
+                                        <div class="form-group mt-4">
+                                            <div style="display: flex;">
+                                                <div class="text-primary">
+                                                    +<%=subject.items[5].percentage%>%
+                                                </div>
+                                                <div id="per_bonus" hidden>
+                                                    <%=subject.items[5].percentage%>
+                                                </div>
+                                                <div id="tot_bonus" hidden>
+                                                    <%=subject.items[5].data[0].total%>
+                                                </div>
+                                                &nbsp &nbsp
+                                                <legend> Bonus points </legend>
+                                            </div>
+                                        </div>
+                                        <input type="number" class="form-control" id="grade_bonus" name="grade_bonus"
+                                            placeholder="__/<%= subject.items[5].data[0].total %>"
+                                            value="<% for(x of subject.items[5].data[0].grades) { if(x.user == user._id) {%><%= x.grade %><% } } %>"
+                                            onfocusout="validate(this, '<%= subject.items[5].data[0].total %>')">
+                                        <div class="invalid-feedback"> must be between 0 and <%=
+                                                subject.items[5].data[0].total %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                                        <!-- FINAL GRADE -->
+                                        <div class="col">
+                                            <div class="form-group mt-4">
+                                                <div style="display: flex;">
+                                                    <div class="text-primary">
+                                                        100%
+                                                    </div>
+                                                    &nbsp &nbsp
+                                                    <legend> Total Grade </legend>
+                                                </div>
+                                            </div>
+                                            <input type="number" class="form-control" id="grade_total"
+                                                name="grade_total" placeholder="__/100" onfocusout="validateFinal()">
+                                            <div class="invalid-feedback"> must be between 0 and 100 </div>
+                                            <div class="valid-feedback" id="convNota"> </div>
+                                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </form>
+        <br>
+
+        <iframe name="receiver" id="receiver" hidden></iframe>
+
+        <script>
+            var totalgrade = getTotal()
+            const FINAL = document.getElementById('grade_final')
+            const GRADE = document.getElementById('grade_total')
+            validate(FINAL, 100)
+
+            function getTotal() {
+                // ADD FINAL
+                totalgrade = (Number(document.getElementById('grade_final').value) /
+                    document.getElementById('tot_final').innerHTML) *
+                    Number(document.getElementById('per_final').innerHTML)
+
+                // ADD LA
+                if (document.getElementById('grade_la') != null) {
+                    totalgrade = totalgrade + (Number(document.getElementById('grade_la').value) /
+                        document.getElementById('tot_la').innerHTML) *
+                        Number(document.getElementById('per_la').innerHTML)
+                }
+
+                // ADD ATT
+                if (document.getElementById('grade_attendance') != null) {
+                    totalgrade = totalgrade + (Number(document.getElementById('grade_attendance').value) /
+                        document.getElementById('tot_attendance').innerHTML) *
+                        Number(document.getElementById('per_attendance').innerHTML)
+                }
+
+                // ADD BONUS
+                if (document.getElementById('grade_bonus') != null) {
+                    totalgrade = totalgrade + (Number(document.getElementById('grade_bonus').value) /
+                        document.getElementById('tot_bonus').innerHTML) *
+                        Number(document.getElementById('per_bonus').innerHTML)
+                }
+
+                let i = 0
+                // ADD MIDTERM
+                while (document.getElementById(`per_mt${i}`) != null) {
+                    totalgrade = totalgrade + (Number(document.getElementById(`grade_mt${i}`).value) /
+                        document.getElementById(`tot_mt${i}`).innerHTML) *
+                        Number(document.getElementById(`per_mt${i}`).innerHTML)
+                    i++
+                }
+
+                i = 0
+                // ADD HOMEWORK
+                while (document.getElementById(`per_hw${i}`) != null) {
+                    totalgrade = totalgrade + (Number(document.getElementById(`grade_hw${i}`).value) /
+                        document.getElementById(`tot_hw${i}`).innerHTML) *
+                        Number(document.getElementById(`per_hw${i}`).innerHTML)
+                    i++
+                }
+            }
+
+            function validate(that, max) {
+                getTotal()
+
+                max = Number(max)
+                if (that.value > max || that.value < 0) that.classList.add('is-invalid')
+                //CALCULAR NOTA //
+                else {
+                    that.classList.remove('is-invalid')
+                    document.getElementById('value').value = that.value
+                    document.getElementById('key').value = that.id
+
+                    if (totalgrade == 0) GRADE.value = ''
+                    else GRADE.value = totalgrade.toFixed(2)
+
+                    setgrade()
+                }
+
+            }
+
+            function setgrade() {
+                let nota = GRADE.value
+                let convNota = document.getElementById('convNota')
+                GRADE.classList.add('is-valid')
+
+                if (Math.round(nota) >= 92) {
+                    convNota.innerHTML = '5 - A+'
+                } else if (Math.round(nota) >= 85) {
+                    convNota.innerHTML = '4 - A'
+                } else if (Math.round(nota) >= 77) {
+                    convNota.innerHTML = '3.7 - B+'
+                } else if (Math.round(nota) >= 71) {
+                    convNota.innerHTML = '3 - B'
+                } else if (Math.round(nota) >= 66) {
+                    convNota.innerHTML = '2.7 - C+'
+                } else if (Math.round(nota) >= 60) {
+                    convNota.innerHTML = '2 - C'
+                } else {
+                    convNota.innerHTML = '1 - D'
+                }
+
+                document.getElementById('gradesForm').submit()
+            }
+
+            function validateFinal() {
+                if (GRADE.value > 100 || GRADE.value < 0) {
+                    GRADE.classList.add('is-invalid')
+                    GRADE.classList.remove('is-valid')
+
+                } else if (GRADE.value != '') {
+                    GRADE.classList.remove('is-invalid')
+                    GRADE.classList.add('is-valid')
+
+                    FINAL.value = Math.round(
+                        (Number(document.getElementById('tot_final').innerHTML) / Number(document.getElementById('per_final').innerHTML)) *
+                        (GRADE.value - totalgrade) + Number(FINAL.value))
+
+                    validate(FINAL, 1000)
+
+                } else {
+                    GRADE.classList.remove('is-invalid')
+                    GRADE.classList.remove('is-valid')
+                }
+            }
+
+            function set(that) {that.innerHTML = '<i class="fas fa-link"></i> link' }
+        </script>

@@ -1,0 +1,165 @@
+<div class="row justify-content-md-center">
+    <div class="page header my-3 text-center">
+        <h1>
+            <%= subject.subject %> Grupal Grades 
+            <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'" onmouseout="set(this)" class="btn btn-sm btn-outline-light">
+                <i class="fas fa-link"></i> link
+            </div>
+        </h1>
+    </div>
+    <div class="col-lg table-responsive-md text-center" id="grades">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th> Student</th>
+                    <% for (item of subject.items) { if (item.percentage !=0 && item.percentage !=null) { %>
+                        <th colspan="<%= Number(item.data.length) %>">
+                            <%= item.percentage %>% <%= item.item.split(' ')[0] %> </th>
+                        <% } } %>
+                        <th colspan="2"> Grade </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% var arrGrades=[], arrMec=[]; var indexgrade = 0 %>
+                <% for (userGrade of subject.items[0].data[0].grades) { if (userGrade.user !=null) { indexgrade++%>
+                    <tr>
+                        <th>
+                            <% if (userGrade.user==user._id) { %>
+                                <a href="/account/course/<%= subject._id %>" class="m-btn btn-sm btn-link">
+                                    Me <i class="far fa-edit"></i>
+                                </a>
+                                <% } else { %>
+                                    #
+                                    <% } %>
+                        </th>
+                        <% for (item of subject.items) { if (item.percentage != 0 && item.percentage != null) { for (data of item.data) {; %>
+                            <td id="grade_<%= indexgrade %>_<%= item.index %>">
+                                <% for (x of data.grades) { if (x.user==userGrade.user) { %>
+                                    <%= x.grade %>
+                                        <% }} %>
+                            </td>
+                            <% }}} %>
+                            <td id="total_<%= indexgrade %>">
+                                <% for (x of subject.totalgrade) { if (x.user==userGrade.user) { %>
+                                    <%= Math.round(x.grade) %>
+                                <% }} %>    
+                            </td>
+                            <td>
+                                <% for (x of subject.totalgrade) { if (x.user==userGrade.user) { %>
+                                    <% if (Math.round(x.grade) >= 92) { %>
+                                        5 - A+
+                                    <% } else if (Math.round(x.grade) >= 85) { %>
+                                        4 - A
+                                    <% } else if (Math.round(x.grade) >= 77) { %>
+                                        3.7 - B+
+                                    <% } else if (Math.round(x.grade) >= 71) { %>
+                                        3 - B
+                                    <%  } else if (Math.round(x.grade) >= 66) { %>
+                                        2.7 - C+
+                                    <% } else if (Math.round(x.grade) >= 60) { %>
+                                        2 - C
+                                    <% } else { %>
+                                        1 - D
+                                    <% } %>
+                                <% }} %> 
+                            </td>
+                    </tr>
+                    <% }} %>
+                    <tr>
+                        <th> AVG </th>
+                        <% for (item of subject.items) { if (item.percentage != 0 && item.percentage != null) { for (data of item.data) { %>
+                            <th>
+                                <% let avg = [] %>
+                                <% for (x of data.grades) { if(x.grade != null) { avg.push(x.grade) }} %>
+                                <% if (avg.length != 0) { %> 
+                                <%= (avg.reduce((a, b)=> a + b) / avg.length).toFixed(1) %>
+                                <% } %>
+                            </th>
+                            <% }}} %>
+                            <th id="avg_grade">
+                                <% let avg = [] %>
+                                <% for (x of subject.totalgrade) { if(x.grade != null) { avg.push(x.grade) }} %>
+                                <% var grade = (avg.reduce((a, b)=> a + b) / avg.length).toFixed(1) %>
+                                <%= grade %>
+                            </th>
+                            <th>
+                                <% if (Math.round(grade) >= 92) { %>
+                                    5 - A+
+                                <% } else if (Math.round(grade) >= 85) { %>
+                                    4 - A
+                                <% } else if (Math.round(grade) >= 77) { %>
+                                    3.7 - B+
+                                <% } else if (Math.round(grade) >= 71) { %>
+                                    3 - B
+                                <%  } else if (Math.round(grade) >= 66) { %>
+                                    2.7 - C+
+                                <% } else if (Math.round(grade) >= 60) { %>
+                                    2 - C
+                                <% } else { %>
+                                    1 - D
+                                <% } %>
+                            </th>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr>
+<canvas id=" myChart" class="mb-3"></canvas>
+
+<script>
+    var grades = [0, 0, 0, 0, 0, 0, 0]
+    var nro = 1
+
+    while (document.getElementById(`total_${nro}`) != null) {
+        let nota = document.getElementById(`total_${nro}`).innerHTML
+        if (Math.round(nota) >= 92) {
+            grades[6] += 1
+        } else if (Math.round(nota) >= 85) {
+            grades[5] += 1
+        } else if (Math.round(nota) >= 77) {
+            grades[4] += 1
+        } else if (Math.round(nota) >= 71) {
+            grades[3] += 1
+        } else if (Math.round(nota) >= 66) {
+            grades[2] += 1
+        } else if (Math.round(nota) >= 60) {
+            grades[1] += 1
+        } else {
+            grades[0] += 1
+        }
+        nro++
+    }
+
+    var ctx = document.getElementById(' myChart').getContext('2d'); Chart.defaults.global.defaultFontColor = 'white';
+    var myBubbleChart = new Chart(ctx, {
+        type: 'bar', data: {
+            datasets: [{
+                label: 'Grades', data: grades, backgroundColor: '#1565CF', borderWidth: 1
+            }],
+            labels: ["D", "C", "C+", "B", "B+", "A", "A+"],
+        }, options: {
+            scales: {
+                xAxes:
+                    [{ stacked: true }], yAxes: [{ stacked: true }, {
+                        ticks: {
+                            stepSize: 1, max:
+                                Math.max(...grades)
+                        }
+                    }]
+            }
+        }
+    })
+    
+    console.log(randn_bm())
+
+    function randn_bm() {
+        var u = 0, v = 0;
+        while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while(v === 0) v = Math.random();
+        return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    }
+
+    function set(that) {that.innerHTML = '<i class="fas fa-link"></i> link' }
+
+    </script>

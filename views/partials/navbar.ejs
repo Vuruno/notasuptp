@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg width-100 navbar-dark bg-dark">
+    <div class="container">
+        <a href="/" class="navbar-brand" data-bs-toggle="tooltip" data-bs-placement="right" title="See my subjects">
+            <%= user.name.givenName%> <%= user.name.familyName%>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="themes">
+                        My Subjects <span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="themes">
+                        <a class="dropdown-item" href="/"> See my subjects </a>
+                        <a class="dropdown-item" href="/account/courses"> Edit my subjects </a>
+                        <div class="dropdown-divider"></div>
+                        <% user.enrolled.forEach(function(subject){ %>
+                            <a class="dropdown-item" href="/account/course/<%= subject.id %>">
+                                <%- subject.subject %>
+                            </a>
+                            <% }) %>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="download"> Tables
+                        <span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/account/"> My grades </a>
+                        <a class="dropdown-item" href="/account/grupal"> Grupal grades </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/tables#grades"> Conv. of grades </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="download"> Account
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li> <span class="dropdown-item disabled" href="/auth/google"> <%= user.email %> </span> </li>
+                        <li> <a class="dropdown-item" href="/auth/google"> Sign in </a> </li>
+                        <li> <a class="dropdown-item" href="/auth/logout"> Sign out </a> </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-md-auto">
+                <a target="_blank" style="text-decoration: none;" href="https://www.instagram.com/brunobordond/"
+                    class="fw-light fs-6 text-secondary text-center">
+                    &trade; B. Bordón 2022
+                </a>
+                <i class="em em-flag-tw" aria-role="presentation" aria-label="Taiwan Flag"></i>
+                <i class="em em-flag-py" aria-role="presentation" aria-label="Paraguay Flag"></i>
+            </ul>
+        </div>
+    </div>
+</nav>
