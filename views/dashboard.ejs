@@ -26,7 +26,7 @@
                                                     <% for (usergrade of each.grades) { if (usergrade.user == user._id) { grade = grade + usergrade.grade }}%>
                                                     <% total = total + Number(each.total) %>
                                                 <% } %>
-                                                <%= grade %>/<%= total %>
+                                                <%= Math.round(grade) %>/<%= total %>
                                                 </td>
                                                 <td>
                                                 <%= item.percentage %>%
