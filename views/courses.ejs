@@ -16,7 +16,7 @@
                       <i class="far fa-edit"></i>
                     </a>
                   </th>
-                  <th onclick="add('<%= subject._id %>')" onmouseover="overAdd(this)" onmouseout="out(this)">
+                  <th onclick="add('<%= subject._id %>', this)" onmouseover="overAdd(this)" onmouseout="out(this)">
                     <%= subject.subject %>
                   </th>
                   <th></th>
@@ -50,7 +50,7 @@
                     <i class="far fa-edit"></i>
                   </a>
                 </th>
-                <th onclick="remove('<%= subject.id %>')" onmouseover="overRemove(this)" onmouseout="out(this)">
+                <th onclick="remove('<%= subject.id %>', this)" onmouseover="overRemove(this)" onmouseout="out(this)">
                   <%= subject.subject %>
                 <th></th>
                 <th></th>
@@ -79,29 +79,37 @@
 </form>
 
 <script>
-  function add(id) {
+  function add(id, that) {
+    that.innerHTML = '<div class="spinner-border text-light spinner-border-sm" role="status"></div>'
     document.getElementById('idadd').value = id
     document.getElementById('add').submit()
   }
 
-  function remove(id) {
+  function remove(id, that) {
+    that.innerHTML = '<div class="spinner-border text-light spinner-border-sm" role="status"></div>'
     document.getElementById('idremove').value = id
     document.getElementById('remove').submit()
   }
 
   function overAdd(that) {
-    document.body.style.cursor = "pointer";
-    that.innerHTML = `${that.innerText} <i class="far fa-check-square"></i>`
+    if (that.innerHTML != '<div class="spinner-border text-light spinner-border-sm" role="status"></div>') {
+      document.body.style.cursor = "pointer";
+      that.innerHTML = `${that.innerText} <i class="far fa-check-square"></i>`
+    }
   }
 
   function overRemove(that) {
-    document.body.style.cursor = "pointer";
-    that.innerHTML = `${that.innerText} <i class="far fa-window-close"></i>`
+    if (that.innerHTML != '<div class="spinner-border text-light spinner-border-sm" role="status"></div>') {
+      document.body.style.cursor = "pointer";
+      that.innerHTML = `${that.innerText} <i class="far fa-window-close"></i>`
+    }
   }
 
   function out(that) {
     document.body.style.cursor = "default";
-    let text = that.innerText.slice(0, that.innerText.length)
-    that.innerHTML = text
+    if (that.innerHTML != '<div class="spinner-border text-light spinner-border-sm" role="status"></div>') {
+      let text = that.innerText.slice(0, that.innerText.length)
+      that.innerHTML = text
+    }
   }
 </script>

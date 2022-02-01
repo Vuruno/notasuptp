@@ -450,24 +450,13 @@ router.post('/remove', isLoggedIn, async function (req, res) {
 
     await User.findOneAndUpdate({ _id: req.user._id }, {
         $pull: {
-            enrolled: { id: subjectRemove._id, subject: subjectRemove.subject },
+            enrolled: { id: subjectRemove._id },
         }
     })
 
-    // if (req.user._id != null) {
-    //     await Subject.findOneAndUpdate(
-    //         { _id: subjectRemove._id },
-    //         { $pull: { "items.$[elem].data.$[elem].grades": { user: req.user._id } } },
-    //         {
-    //             arrayFilters: [
-    //                 { "elem.percentage": { $exists: true } }
-    //             ]
-    //         }
-    //     )
-    // }
+    let newEnroledds = await User.findOne({ _id: req.user._id })
 
-    req.user.enrolled.splice(
-        req.user.enrolled.indexOf({ id: subjectRemove._id, subject: subjectRemove.subject }), 1)
+    req.user.enrolled = newEnroledds.enrolled
 
     res.redirect('/account/courses')
 })
