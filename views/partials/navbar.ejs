@@ -6,8 +6,10 @@
         </button>
         <img src="<%= user.picture %>" style="height: 2em; border-radius: 50%;" title="<%= user.email %>"> &nbsp
         <a href="/" class="navbar-brand">
-            <%= user.name.givenName%>
-                <%= user.name.familyName%>
+            <div id="myNaveNavBar">
+                <%= user.name.givenName%>
+                    <%= user.name.familyName%>
+            </div>
         </a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav">

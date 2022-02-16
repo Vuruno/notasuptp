@@ -1,11 +1,19 @@
 <div class="container">
     <div class="row mt-5">
         <hr>
-        <h1 class="page-header"> 
+        <h1 class="page-header">
             <i class="em em-flag-tw" aria-role="presentation" aria-label="Taiwan Flag"></i> UPTP
-            <i class="em em-flag-py" aria-role="presentation" aria-label="Paraguay Flag"></i> GRADES
+            PLATFORM <i class="em em-flag-py" aria-role="presentation" aria-label="Paraguay Flag"></i>
         </h1>
         <div class="span mb-3"> To use this page <a href="/auth/google"> sign in </a></div>
         <hr>
+        <div class="text-muted"> developed by: <a class="text-muted" href="https://www.instagram.com/brunobordond/">Bruno Bordon</a></div>
     </div>
 </div>
+<% if (status==':logout' ) { %>
+    <script>
+        localStorage.setItem("settled", 'false')
+        localStorage.setItem("user_id", '')
+    </script>
+    <script src="./rememberAuth.js"></script>
+    <% } %>

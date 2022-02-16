@@ -16,18 +16,16 @@ router.get('/', async function (req, res) {
         user: req.user || empyUser,
         allSubjects: await Subject.find(),
         weekSchedule: await calendar.getWeek(),
-        // todaySchedule: await calendar.getToday(),
-        // yesterdaySchedule: await calendar.getYesterday(),
-        // tomorrowSchedule: await calendar.getTomorrow(),
-        // todayHw: await calendar.hwToday(),
-        // yesterdayHw: await calendar.hwYesterday(),
-        // tomorrowHw: await calendar.hwTomorrow(),
         allHw: await calendar.allHW()
     })
 })
 
 router.get('/welcome', isntLoggedIn, function (req, res) {
     res.render('welcome', { user: req.user || empyUser })
+})
+
+router.get('/welcome:status', isntLoggedIn, function (req, res) {
+    res.render('welcome', { user: req.user || empyUser, status: req.params.status })
 })
 
 router.get('/tables', function (req, res) {

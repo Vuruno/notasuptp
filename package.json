@@ -20,7 +20,7 @@
     "express": "^4.17.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
-    "googleapis": "^39.2.0",
+    "googleapis": "^95.0.0",
     "linear-chart-js": "^1.0.18",
     "mongoose": "^6.1.6",
     "mongoose-findorcreate": "^3.0.0",
