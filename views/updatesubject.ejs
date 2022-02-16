@@ -30,19 +30,19 @@
                                     value="<%= typeof subject != 'undefined' ? subject : '' %>" required>
                             </div>
                         </div>
+
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1" class="form-label mt-4"> Semester </label>
-                                <select class="form-select" id="semester" name="semester"
-                                    value="<%= typeof semester != 'undefined' ? semester : '' %>" required>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
+                                <select class="form-select" id="semester" name="semester" required>
+                                    <option id="sem_1">1</option>
+                                    <option id="sem_2">2</option>
+                                    <option id="sem_3">3</option>
+                                    <option id="sem_4">4</option>
+                                    <option id="sem_5">5</option>
+                                    <option id="sem_6">6</option>
+                                    <option id="sem_7">7</option>
+                                    <option id="sem_8">8</option>
                                 </select>
                             </div>
                         </div>
@@ -77,13 +77,13 @@
                                         grade
                                     </label>
                                     <input type="number" class="form-control" id="per_final" name="per_final"
-                                        placeholder="30" required
+                                        placeholder="30"
                                         value="<%= typeof per_final != 'undefined' ? per_final : '' %>">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1" class="form-label mt-4"> Top grade </label>
                                     <input type="number" class="form-control" id="tot_final" name="tot_final"
-                                        placeholder="100" required
+                                        placeholder="100"
                                         value="<%= typeof tot_final != 'undefined' ? tot_final : '' %>">
                                 </div>
 
@@ -185,7 +185,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
                                             </label>
-                                            <input type="string" class="form-control" id="tot_la" name="tot_la"
+                                            <input type="number" class="form-control" id="tot_la" name="tot_la"
                                                 placeholder=""
                                                 value="<%= typeof tot_la != 'undefined' ? tot_la : '' %>">
                                         </div>
@@ -212,7 +212,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
                                             </label>
-                                            <input type="string" class="form-control" id="tot_attendance"
+                                            <input type="number" class="form-control" id="tot_attendance"
                                                 name="tot_attendance" placeholder=""
                                                 value="<%= typeof tot_attendance != 'undefined' ? tot_attendance : '' %>">
                                         </div>
@@ -239,7 +239,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputEmail1" class="form-label mt-4"> Top grade
                                             </label>
-                                            <input type="string" class="form-control" id="tot_bonus" name="tot_bonus"
+                                            <input type="number" class="form-control" id="tot_bonus" name="tot_bonus"
                                                 placeholder=""
                                                 value="<%= typeof tot_bonus != 'undefined' ? tot_bonus : '' %>">
                                         </div>
@@ -250,6 +250,29 @@
                     </div>
 
                     <hr>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1" class="form-label"> Meeting link </label>
+                                <input type="url" class="form-control" id="meeting" name="meeting"
+                                    aria-describedby="emailHelp" placeholder="https://unitaiwan.webex.com/meet/paulo.uptp"
+                                    value="<%= typeof meeting != 'undefined' ? meeting : '' %>">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1" class="form-label"> Classroom code / </label>
+                                <input type="text" class="form-control" id="classroom" name="classroom"
+                                    aria-describedby="emailHelp" placeholder="5a3ci87"
+                                    value="<%= typeof classroom != 'undefined' ? classroom : '' %>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
                     <div class="row">
                         <div class="col-3">
                             <button type="submit" class="btn btn-primary mb-5"> Save </button>
@@ -269,3 +292,7 @@
 <div class="col"></div>
 </div>
 <h1></h1>
+
+<script>
+    document.getElementById(`sem_${"<%= typeof semester != 'undefined' ? semester : '' %>"}`).selected = 'selected'
+</script>

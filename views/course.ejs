@@ -1,16 +1,28 @@
-<h1 class="mb-0 mt-3">
-    <%= subject.subject %>
-        <a href="/account/updatesubject:<%= subject._id %>" class="btn btn-sm btn-outline-light">
-            <i class="far fa-edit"></i> edit
-        </a>
-        <a href="/account/grupal/<%= subject._id %>" class="btn btn-sm btn-secondary">
-            Grupal
-        </a>
-        <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'"
-            onmouseout="set(this)" class="btn btn-sm btn-outline-primary">
-            <i class="fas fa-link"></i> link
-        </div>
-</h1>
+<div class="d-flex mb-0 mt-3">
+    <h1>
+        <%= subject.subject %>
+    </h1> &nbsp &nbsp &nbsp
+    <h6 class="align-self-end text-muted">Semester <%= subject.semester %>
+    </h6>
+</div>
+<a href="/account/updatesubject:<%= subject._id %>" class="btn btn-sm btn-outline-light">
+    <i class="far fa-edit"></i> edit
+</a>
+<a href="/account/grupal/<%= subject._id %>" class="btn btn-sm btn-outline-light">
+    Grupal
+</a>
+<div onclick="this.innerHTML = 'copied!'; navigator.clipboard.writeText(window.location.href)"
+    onmouseout="setSite(this)" class="btn btn-sm btn-outline-light">
+    <i class="fas fa-link"></i> site
+</div>
+<div onclick="this.innerHTML = 'copied!'; navigator.clipboard.writeText('<%= subject.classroom %>')"
+    onmouseout="setClassroom(this)" class="btn btn-sm btn-outline-light">
+    <i class="fas fa-chalkboard-teacher"></i> classroom
+</div>
+<a target="_blank" href="<%= subject.meeting %>" class="btn btn-sm btn-outline-light">
+    <i class="fas fa-video"></i> meeting
+</a>
+
 
 <% if (user.name.givenName=='UPTP' ) { %>
     <div class="alert alert-dark alert-dismissible fade show mt-3" role="alert">
@@ -369,5 +381,7 @@
                 }
             }
 
-            function set(that) { that.innerHTML = '<i class="fas fa-link"></i> link' }
+            function setSite(that, text) { that.innerHTML = '<i class="fas fa-link"></i> site' }
+            function setClassroom(that, text) { that.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> classroom' }
+            function setMeeting(that, text) { that.innerHTML = '<i class="fas fa-video"></i> meeting' }
         </script>

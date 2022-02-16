@@ -6,7 +6,7 @@ const User = require('../models/User');
 const req = require('express/lib/request');
 const { redirect } = require('express/lib/response');
 
-const empyUser = { googleId: "", name: { givenName: "UPTP", familyName: "Grades" }, email: "", enrolled: [] }
+const empyUser = { googleId: "", picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png", name: { givenName: "UPTP", familyName: "" }, email: "", enrolled: [] }
 
 function toEmpy(str) {
     if (str == '0') return ''
@@ -14,6 +14,14 @@ function toEmpy(str) {
 }
 
 router.get('/', isLoggedIn, async function (req, res) {
+    let mySubjects = []
+    req.user.enrolled.forEach(function (subject) { })
+
+    if (req.user.enrolled.length < 1) res.redirect('/account/courses')
+    else res.render('mysubjects', { user: req.user || empyUser, allSubjects: await Subject.find() })
+})
+
+router.get('/mygrades', isLoggedIn, async function (req, res) {
     res.render('mygrades', { user: req.user || empyUser, allSubjects: await Subject.find() })
 })
 
@@ -77,6 +85,8 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
 
     let subject = subjectToEdit.subject
     let semester = subjectToEdit.semester
+    let meeting = subjectToEdit.meeting
+    let classroom = subjectToEdit.classroom
 
     let per_final = subjectToEdit.items[0].percentage
     let tot_final = subjectToEdit.items[0].data[0].total
@@ -104,7 +114,7 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
 
     res.render('updatesubject', {
         user: req.user, id,
-        subject, semester, per_final, tot_final,
+        subject, meeting, classroom, semester, per_final, tot_final,
         per_midterm, tot_midterm, per_each_midterm,
         per_hw, tot_hw, per_each_hw,
         per_la, tot_la,
@@ -117,7 +127,9 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
 router.post('/updatesubject', isLoggedIn, async function (req, res) {
     var { id, subject, semester, per_final, tot_final, per_midterm, tot_midterm,
         per_each_midterm, per_hw, tot_hw, per_each_hw, per_la, tot_la,
-        per_attendance, tot_attendance, per_bonus, tot_bonus } = req.body
+        per_attendance, tot_attendance, per_bonus, tot_bonus, meeting, classroom } = req.body
+
+    semester = Number(semester)
 
     let errors = []
     tot_midterm = tot_midterm.split(',')
@@ -207,7 +219,7 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
             per_hw, tot_hw, per_each_hw,
             per_la, tot_la,
             per_attendance, tot_attendance,
-            per_bonus, tot_bonus
+            per_bonus, tot_bonus, meeting, classroom
         });
     }
     // GUARDAR ASIGNATURA
@@ -354,6 +366,8 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         if (id != '') grades = tempSubject.totalgrade
         let updatesubject = {
             subject: subject,
+            meeting: meeting,
+            classroom: classroom,
             semester: semester,
             modifiedby: modifiedby,
             items: itemArray,

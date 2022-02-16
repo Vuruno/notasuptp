@@ -14,15 +14,13 @@ mongoose.connect(
 )
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
-
+app.use(express.json({ limit: '1mb' }))
 // settings
 const port = 3000
 app.use(expressLayouts);
+app.use(express.urlencoded({ extended: false }))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-
-// Express body parser
-app.use(express.urlencoded({ extended: true }));
 
 // Express session
 app.use(
@@ -47,6 +45,9 @@ app.use('/account', require('./routes/account.js'))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+global.pushSubscripton
+require('./settings/sendNotification.js')
+require('./settings/calendarapi')
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`)

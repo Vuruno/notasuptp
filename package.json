@@ -20,12 +20,15 @@
     "express": "^4.17.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
+    "googleapis": "^39.2.0",
     "linear-chart-js": "^1.0.18",
     "mongoose": "^6.1.6",
     "mongoose-findorcreate": "^3.0.0",
+    "node-cron": "^3.0.0",
     "passport": "^0.5.2",
     "passport-google-oauth2": "^0.2.0",
-    "passport-remember-me": "^0.0.1"
+    "passport-remember-me": "^0.0.1",
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

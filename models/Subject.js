@@ -3,6 +3,8 @@ var findOrCreate = require('mongoose-findorcreate')
 
 const SubjectSchema = new mongoose.Schema({
     subject: String,
+    meeting: { type: String, default: null },
+    classroom: { type: String, default: null },
     semester: Number,
     modifiedby: [{ user: String, date: { type: Date, default: Date.now } }],
     items:
