@@ -268,7 +268,7 @@
             var totalgrade = getTotal()
             const FINAL = document.getElementById('grade_final')
             const GRADE = document.getElementById('grade_total')
-            validate(FINAL, 100)
+            validate(FINAL, 100, false)
             if (GRADE.value == '') GRADE.classList.remove('is-valid')
 
             function getTotal() {
@@ -317,7 +317,7 @@
                 }
             }
 
-            function validate(that, max) {
+            function validate(that, max, submit = true) {
                 getTotal()
 
                 max = Number(max)
@@ -331,12 +331,12 @@
                     if (totalgrade == 0) GRADE.value = ''
                     else GRADE.value = totalgrade.toFixed(2)
 
-                    setgrade()
+                    setgrade(submit)
                 }
 
             }
 
-            function setgrade() {
+            function setgrade(submit = true) {
                 let nota = GRADE.value
                 let convNota = document.getElementById('convNota')
                 GRADE.classList.add('is-valid')
@@ -357,7 +357,7 @@
                     convNota.innerHTML = '1 - D'
                 }
 
-                document.getElementById('gradesForm').submit()
+                if(submit) document.getElementById('gradesForm').submit()
             }
 
             function validateFinal() {

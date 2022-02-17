@@ -1,9 +1,23 @@
-//If 'settled' has'nt been settled or passed more than 5 minutes (300000ms) since last check
-if (isNaN(localStorage.getItem("settled")) || (Date.now() - localStorage.getItem("settled")) > 30) {
+//get Cookies
+let decodedCookie = decodeURIComponent(document.cookie)
+decodedCookie = decodedCookie.split(';')
+let settled = '', user_id = ''
+
+for (x of decodedCookie) {
+    if (x.split('=')[0].includes('settled')) settled = Number(x.split('=')[1].split(';')[0])
+    else if (x.split('=')[0].includes('user_id')) user_id = x.split('=')[1].split(';')[0]
+}
+
+let currentUri = window.location.href
+currentUri = window.location.href.split(':')
+currentUri = currentUri[currentUri.length - 1]
+
+//If 'settled' hasn't been settled or passed more than 5 minutes (300000ms) since last check
+if ((isNaN(settled) || (Date.now() - settled) > 300000) && currentUri != 'logout') {
     console.log('verifying saved identity')
     const options = {
         method: 'POST',
-        body: JSON.stringify({ user_id: localStorage.getItem("user_id") }),
+        body: JSON.stringify({ user_id: user_id }),
         headers: {
             "Content-Type": "application/json"
         }
@@ -14,18 +28,29 @@ if (isNaN(localStorage.getItem("settled")) || (Date.now() - localStorage.getItem
         .then(response => {
             // console.log(response.user)
             if (response.user == null) {
-                localStorage.setItem("settled", "false")
+                document.cookie = "settled=false; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/"
             } else {
-                localStorage.setItem("settled", Date.now())
-                localStorage.setItem("user_id", response.user._id)
+                document.cookie = `settled=${Date.now()}; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/`
+                document.cookie = `user_id=${response.user._id}; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/`
             }
         });
 }
 setTimeout(function () {
-    if (localStorage.getItem("user_id") == null ||
-        localStorage.getItem("user_id") == undefined ||
-        localStorage.getItem("user_id") == 'undefined' ||
-        localStorage.getItem("user_id") == '') return
-    if (document.getElementById('myNaveNavBar').innerText != 'UPTP') return
+    //Don't reload if user_id isn't settled and navbar says 'UPTP'
+    if ((user_id == null ||
+        user_id == undefined ||
+        user_id == 'undefined' ||
+        user_id == '' ||
+        user_id == "''" ||
+        user_id == '""') &&
+        document.getElementById('myNaveNavBar').innerText == 'UPTP') return
+    //Don't reload if user_id is settled and navbar doesn't says 'UPTP'
+    if (!(user_id == null ||
+        user_id == undefined ||
+        user_id == 'undefined' ||
+        user_id == '' ||
+        user_id == "''" ||
+        user_id == '""') &&
+        document.getElementById('myNaveNavBar').innerText != 'UPTP') return
     location.reload()
-}, 2000);
+}, 3000);

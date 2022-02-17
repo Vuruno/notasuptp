@@ -47,9 +47,9 @@ router.get('/coursenoexists', async function (req, res) {
     res.render('coursenoexists', { user: req.user || empyUser })
 })
 
-router.get('/course/:id', async function (req, res) {
-    let id = req.params.id
-    let subject = await Subject.findOne({ _id: id })
+router.get('/course:subjectid', async function (req, res) {
+    let subjectId = req.params.subjectid
+    let subject = await Subject.findOne({ _id: subjectId })
     if (subject == null) {
         res.redirect('/account/coursenoexists')
     } else if (req.user == undefined) {
@@ -382,7 +382,7 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         }
 
         if (id == '') res.redirect('/account/courses')
-        else res.redirect(`/account/course/${id}`)
+        else res.redirect(`/account/course${id}`)
     }
 
 })

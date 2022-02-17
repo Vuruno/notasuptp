@@ -9,7 +9,7 @@ const empyUser = { googleId: "", picture: "https://upload.wikimedia.org/wikipedi
 require('../settings/auth');
 
 router.get('/signincourse:url', (req, res, next) => {
-    req.session.returnTo = `/account/course/${req.params.url}`
+    req.session.returnTo = `/account/course${req.params.url}`
     res.redirect('/auth/google')
 })
 
@@ -40,7 +40,7 @@ router.get('/google/failure', (req, res) => {
 router.post('/remember', async function (req, res, next) {
     let user = String(req.body.user_id)
     //Search in db
-    if (user == '' || user == 'undefined') user = null
+    if (user == '' || user == "''" || user == 'undefined') user = null
     user = await User.findById(user)
     
     if (user == null) { //If not user registered

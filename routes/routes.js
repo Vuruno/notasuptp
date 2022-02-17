@@ -21,7 +21,7 @@ router.get('/', async function (req, res) {
 })
 
 router.get('/welcome', isntLoggedIn, function (req, res) {
-    res.render('welcome', { user: req.user || empyUser })
+    res.render('welcome', { user: req.user || empyUser, status: '' })
 })
 
 router.get('/welcome:status', isntLoggedIn, function (req, res) {

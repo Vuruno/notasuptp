@@ -7,13 +7,13 @@
         </h1>
         <div class="span mb-3"> To use this page <a href="/auth/google"> sign in </a></div>
         <hr>
-        <div class="text-muted"> developed by: <a class="text-muted" href="https://www.instagram.com/brunobordond/">Bruno Bordon</a></div>
+        <div class="text-muted"> developed by: <a class="text-muted"
+                href="https://www.instagram.com/brunobordond/">Bruno Bordon</a></div>
     </div>
 </div>
 <% if (status==':logout' ) { %>
     <script>
-        localStorage.setItem("settled", 'false')
-        localStorage.setItem("user_id", '')
+        document.cookie = "settled=false; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/"
+        document.cookie = "user_id=''; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/"
     </script>
-    <script src="./rememberAuth.js"></script>
     <% } %>

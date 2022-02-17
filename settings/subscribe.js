@@ -16,7 +16,7 @@ const subscription = async () => {
     applicationServerKey: urlBase64ToUint8Array(PUBLIC_NOTIFY_KEY)
   });
 
-  console.log(subscription);
+  // console.log(subscription);
 
   // Send Notification
   await fetch("/subscribe", {
