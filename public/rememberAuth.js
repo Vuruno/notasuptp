@@ -28,10 +28,10 @@ if ((isNaN(settled) || (Date.now() - settled) > 300000) && currentUri != 'logout
         .then(response => {
             // console.log(response.user)
             if (response.user == null) {
-                document.cookie = "settled=false; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/"
+                document.cookie = "settled=false; expires=Sat, 31 Dec 2022 23:59:59 GMT"
             } else {
-                document.cookie = `settled=${Date.now()}; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/`
-                document.cookie = `user_id=${response.user._id}; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=http://localhost:3000/`
+                document.cookie = `settled=${Date.now()}; expires=Sat, 31 Dec 2022 23:59:59 GMT`
+                document.cookie = `user_id=${response.user._id}; expires=Sat, 31 Dec 2022 23:59:59 GMT`
             }
         });
 }
