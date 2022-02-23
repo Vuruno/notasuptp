@@ -1,0 +1,23 @@
+Name must be exactly the same for a lot of functionalities (also the uppercase) <br>
+<% for (subject of allSubjects) { %>
+    - <%=subject.subject%> <br>
+<% } %>
+
+<form action="/calDeleteSubject" method="post" id="my-form">
+    <label for="subject"> Subject: </label>
+    <input type="text" id="subject" name="subject" required> <br>
+
+    <label for="from"> From: </label>
+    <input type="date" name="from" id="from" required><br>
+    <label for="to"> To: </label>
+    <input type="date" name="to" id="to" required> <br>
+
+    <button type="submit"> Submit </button>
+</form>
+
+<script>
+    document.getElementById('my-form').onsubmit(function (e) {
+        e.preventDefault();
+        // do something
+    });
+</script>

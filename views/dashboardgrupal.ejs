@@ -1,5 +1,7 @@
 <div class="row row-cols-lg-4 row-cols-sm-2 row-cols-md-2 text-center my-5">
-    <% allSubjects.forEach ( function (index) { var grupalAverage=[] %>
+    <% allSubjects.forEach ( function (index) { var grupalAverage=[]; %>
+        <% if (subject.enrolled.indexOf(user.googleId) > -1  && 
+        index.totalgrade[index.totalgrade.map(function (e) { return e.user; }).indexOf(String(user.googleId))].grade != null ) { %>
         <div class="col">
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header">
@@ -11,8 +13,8 @@
                     <div class="card-text">
                         <table class="table m-0 ">
                             <tbody>
-                                <% for (x of index.totalgrade) { if (x.grade !=null) grupalAverage.push(x.grade); %>
-                                    <% if (x.user==user._id && user.enrolled.map(function(e) { return e.id;
+                                <% for (x of index.totalgrade) { if (x.grade !=null && index.enrolled.indexOf(x.user) > -1) grupalAverage.push(x.grade); %>
+                                    <% if (x.user==user.googleId && user.enrolled.map(function(e) { return e.id;
                                         }).indexOf(String(index._id))> -1) { %>
                                         <tr>
                                             <th scope="row">
@@ -76,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <% }) %>
+        <% }}) %>
 </div>
 
 </div>

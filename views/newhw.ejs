@@ -1,0 +1,107 @@
+<form action="/account/updatehw" method="post" id="hwform">
+    <input type="text" id="id" name="id" value="<%= typeof id != 'undefined' ? id : null %>" hidden>
+    <fieldset>
+        <div class="row">
+            <% if (typeof id=='undefined' ) { %>
+                <legend> New Homework </legend>
+                <% } else { %>
+                    <legend> Edit Homework </legend>
+                    <% } %>
+
+                        <span>
+                            This will update the g_calendar.
+                        </span>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Subject </label>
+                    <select class="form-select" id="subject" name="subject" required>
+                        <option disabled selected value> -- select -- </option>
+                        <% for ( x of user.enrolled) { %>
+                            <% if (subject == x.subject) { %>
+                                <option selected>
+                                <% } else { %>
+                                    <option>
+                                    <% } %>
+                                <%= x.subject %>
+                            </option>
+                            <%}%>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Title </label>
+                    <input class="form-control" id="title" name="title" placeholder="HW #9 , Circular motion"
+                        value="<%= typeof title != 'undefined' ? title : null %>" required>
+                    </input>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row row-cols-1 row-cols-lg-2">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Date </label>
+                    <input type="date" class="form-control" id="date" name="date" aria-describedby="emailHelp"
+                        value="<%= typeof date != 'undefined' ? date : '' %>" required>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Time </label>
+                    <input type="time" class="form-control" id="time" name="time" aria-describedby="emailHelp"
+                        value="<%= typeof time != 'undefined' ? time : '23:59' %>" required>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row row-cols-1 row-cols-lg-2">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Description (optional) </label>
+                    <textarea type="text" class="form-control" id="description" name="description"
+                        aria-describedby="emailHelp" placeholder="Write on papel all the examples of a motion ..."
+                        rows="2"> <%= typeof description != 'undefined' ? description : '' %> </textarea>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4"> Submit link (optional) </label>
+                    <input type="url" class="form-control" id="link" name="link"
+                        placeholder="https://classroom.google.com/c/NDQ1OTg5ODI0MDMx/a/NDU0NjEyODYzNjM4/details"
+                        value="<%= typeof link != 'undefined' ? link : '' %>">
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-primary mb-5" id="savebutton"> Save </button>
+                <button type="button" onclick="location.href = '/'" class="btn btn-secondary mb-5"> Cancel </button>
+                <% if (typeof id !='undefined' ) {%>
+                    <button type="button" class="btn btn-danger mb-5"
+                        onclick="if (confirm('Delete this hw?') == true) { location.href =`/account/delete-hw<%=id%>`; load(this) }">
+                        Delete hw </button>
+                    <% } %>
+            </div>
+        </div>
+</form>
+
+<script>
+    function load(that) {
+        that.innerHTML = `<div class="spinner-border text-light spinner-border-sm" role="status"></div>`
+    }
+    document.getElementById('hwform').addEventListener('submit', function (evt) {
+        load(document.getElementById('savebutton'))
+    })
+</script>

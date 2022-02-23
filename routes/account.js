@@ -5,6 +5,7 @@ const Subject = require('../models/Subject')
 const User = require('../models/User');
 const req = require('express/lib/request');
 const { redirect } = require('express/lib/response');
+const { createHW, updateHW, getHW, deleteHW, allHW } = require('../settings/calendarapi')
 
 const empyUser = { googleId: "", picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png", name: { givenName: "UPTP", familyName: "" }, email: "", enrolled: [] }
 
@@ -50,12 +51,14 @@ router.get('/coursenoexists', async function (req, res) {
 router.get('/course:subjectid', async function (req, res) {
     let subjectId = req.params.subjectid
     let subject = await Subject.findOne({ _id: subjectId })
+    //verify if subject exists and user is enrolled in
     if (subject == null) {
         res.redirect('/account/coursenoexists')
     } else if (req.user == undefined) {
         res.render('course', { user: empyUser, subject: subject })
     } else if (req.user.enrolled.map(function (e) { return e.id; }).indexOf(String(subject._id)) > -1) {
-        res.render('course', { user: req.user || empyUser, subject: subject })
+        let allHw = await allHW(req.user || empyUser)
+        res.render('course', { user: req.user || empyUser, subject: subject, allHw: allHw })
     } else {
         res.redirect('/account/coursenoexists')
     }
@@ -65,7 +68,8 @@ router.get('/grupal/:id', isLoggedIn, function (req, res) {
     let id = req.params.id
     Subject.findOne({ _id: id }, function (err, subject) {
         if (err) res.redirect('/account/coursenoexists')
-        else if (req.user.enrolled.map(function (e) { return e.id; }).indexOf(String(subject._id)) > -1) {
+        else if (req.user.enrolled.map(function (e) { return e.id; }).indexOf(String(subject._id)) > -1
+            && subject.totalgrade[subject.totalgrade.map(function (e) { return e.user; }).indexOf(String(req.user.googleId))].grade != null) {
             res.render('grupal', { user: req.user || empyUser, subject: subject })
         } else {
             res.redirect('/account/coursenoexists')
@@ -123,6 +127,42 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
     });
 })
 
+router.get('/create-hw', isLoggedIn, async function (req, res) {
+    res.render('newhw', { user: req.user })
+})
+
+router.get('/create-hw:subject', isLoggedIn, async function (req, res) {
+    let subject = req.params.subject
+    res.render('newhw', { user: req.user, subject })
+})
+
+router.get('/update-hw:id', isLoggedIn, async function (req, res) {
+    let id = req.params.id
+    let hw = await getHW(id)
+    if (hw != null) {
+        let end = new Date(hw.data.end.dateTime)
+        let desc = hw.data.description.split('http')
+
+        var subject = hw.data.summary.split(':')[0].trim(),
+            title = hw.data.summary.split(':')[1].trim(),
+            date = `${hw.data.end.dateTime.split('T')[0]}`,
+            time = `${end.getHours()}:${end.getMinutes()}`,
+            description = desc.slice(0, desc.length - 1),
+            link = `http${desc[desc.length - 1]}`
+        if (link.trim() == 'http') link = ''
+
+        res.render('newhw', { user: req.user, id, subject, title, date, time, description, link })
+    } else {
+        res.redirect('/account/create-hw')
+    }
+})
+
+router.get('/delete-hw:id', isLoggedIn, async function (req, res) {
+    let id = req.params.id
+    await deleteHW(id)
+    res.redirect('/')
+})
+
 //POSTS
 router.post('/updatesubject', isLoggedIn, async function (req, res) {
     var { id, subject, semester, per_final, tot_final, per_midterm, tot_midterm,
@@ -131,6 +171,7 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
 
     semester = Number(semester)
 
+    subject = subject.toUpperCase()
     let errors = []
     tot_midterm = tot_midterm.split(',')
     tot_hw = tot_hw.split(',')
@@ -201,15 +242,19 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         if (isNaN(x)) errors.push(`Error in HOMEWORK: In grades just put commas and numbers.`)
     }
 
-    if (tot_per_ech_hw != 0 && Math.abs(tot_per_ech_hw - per_hw) > 1) errors.push(`Error in HOMEWORK: The sum of the percentage isn't the same as the percentage of the HW.`)
-    if (tot_per_ech_midterm != 0 && Math.abs(tot_per_ech_midterm - per_midterm) > 1) errors.push(`Error in MIDTERM: The sum of the percentage isn't the same as the percentage of the MID.`)
+    if (tot_per_ech_hw != 0 && Math.abs(tot_per_ech_hw - per_hw) > 1) errors.push(`Error in HOMEWORK: The sum of the percentage is not the same as the percentage of the HW.`)
+    if (tot_per_ech_midterm != 0 && Math.abs(tot_per_ech_midterm - per_midterm) > 1) errors.push(`Error in MIDTERM: The sum of the percentage is not the same as the percentage of the MID.`)
 
     if (per_each_midterm.length != tot_midterm.length) {
-        if (per_each_midterm[0] != '') errors.push(`Error in MIDTERM: The quantity of percentages and grades aren't the same.`)
+        if (per_each_midterm[0] != '') errors.push(`Error in MIDTERM: The quantity of percentages and grades are not the same.`)
     }
     if (per_each_hw.length != tot_hw.length) {
-        if (per_each_hw[0] != '') errors.push(`Error in HOMEWORK: The quantity of percentages and grades aren't the same.`)
+        if (per_each_hw[0] != '') errors.push(`Error in HOMEWORK: The quantity of percentages and grades are not the same.`)
     }
+
+    //Check is subject name is repeated
+    let subj = await Subject.findOne({ subject: subject })
+    if (subj != null && id == '') errors.push(`Already exists a subject named ${subject}`)
 
     if (errors.length > 0) {
         res.render('updatesubject', {
@@ -375,10 +420,23 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         }
         const saveSubject = new Subject(updatesubject)
 
+        //Save or update
         if (id == '') {
             await saveSubject.save()
         } else {
             await Subject.findOneAndReplace({ '_id': id }, updatesubject)
+
+            //Update name of subjects in User
+            await User.updateMany({ $in: { enrolled: { id: id } } }, {
+                enrolled: { id: id, subject: subject },
+            })
+
+            for (i of req.user.enrolled) {
+                if (i.id == id) {
+                    i.id = id
+                    i.subject = subject
+                }
+            }
         }
 
         if (id == '') res.redirect('/account/courses')
@@ -388,10 +446,11 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
 })
 
 router.post('/setgrades', isLoggedIn, async function (req, res) {
+    // post function use two values, the grade to update, and the 'key' (label of what tag update)
     var value = req.body.value
     var totalgrade = Number(req.body.grade_total)
     var key = req.body.key
-    var user = req.user._id
+    var user = req.user.googleId
     var index = req.body.key
 
     if (key.includes('final')) key = 'Final Exam'
@@ -404,6 +463,7 @@ router.post('/setgrades', isLoggedIn, async function (req, res) {
     index = index.replace(/^\D+/g, '')
     if (index == '') index = 0
 
+    //update in db
     await Subject.findOneAndUpdate(
         { _id: req.body.id },
         {
@@ -423,26 +483,34 @@ router.post('/setgrades', isLoggedIn, async function (req, res) {
     // console.log(`item.[${key}].data.[${index}].grades.[${user}].grade = ${value}`)
 })
 
-router.post('/add', isLoggedIn, async function (req, res) {
+router.post('/addsubject', isLoggedIn, async function (req, res) {
     var { idadd } = req.body
     var subjectAdd = await Subject.findOne({ _id: idadd })
 
+    // ADD CLASS TO USER
+    // in db
     await User.findOneAndUpdate({ _id: req.user._id }, {
         $push: {
             enrolled: { id: subjectAdd._id, subject: subjectAdd.subject },
         }
     })
+    // in server
+    req.user.enrolled.push({ id: subjectAdd._id, subject: subjectAdd.subject })
+
+    // ADD USER TO CLASS
+    // in db
     if (req.user._id != null) {
         let newUser = true
-        for (x of subjectAdd.items[0].data[0].grades) if (x.user == req.user._id) newUser = false
+        for (x of subjectAdd.items[0].data[0].grades) if (x.user == req.user.googleId) newUser = false
 
         if (newUser) {
             await Subject.findOneAndUpdate(
                 { _id: subjectAdd._id },
                 {
                     $push: {
-                        "items.$[elem].data.$[elem].grades": { grade: '', user: req.user._id },
-                        "totalgrade": { grade: '', user: req.user._id }
+                        "items.$[elem].data.$[elem].grades": { grade: '', user: req.user.googleId },
+                        "totalgrade": { grade: '', user: req.user.googleId },
+                        "enrolled": req.user.googleId
                     }
                 },
                 {
@@ -451,28 +519,73 @@ router.post('/add', isLoggedIn, async function (req, res) {
                     ]
                 }
             )
+        } else {
+            await Subject.findOneAndUpdate(
+                { _id: subjectAdd._id },
+                {
+                    $push: {
+                        "enrolled": req.user.googleId
+                    }
+                }
+            )
         }
     }
 
-    req.user.enrolled.push({ id: subjectAdd._id, subject: subjectAdd.subject })
     res.redirect('/account/courses')
 })
 
-router.post('/remove', isLoggedIn, async function (req, res) {
+router.post('/removesubject', isLoggedIn, async function (req, res) {
     var { idremove } = req.body
     var subjectRemove = await Subject.findOne({ _id: idremove })
 
+    // REMOVE USER FROM CLASS
+    await Subject.findOneAndUpdate({ _id: idremove }, {
+        $pull: {
+            enrolled: req.user.googleId,
+        }
+    })
+
+    //REMOVE CLASS FROM USER
+    // In db
     await User.findOneAndUpdate({ _id: req.user._id }, {
         $pull: {
             enrolled: { id: subjectRemove._id },
         }
     })
 
+    //In server
     let newEnroledds = await User.findOne({ _id: req.user._id })
-
     req.user.enrolled = newEnroledds.enrolled
 
     res.redirect('/account/courses')
+})
+
+router.post('/updatehw', isLoggedIn, async function (req, res) {
+    let idhw
+    if (req.body.id == '') idhw = await createHW(req.body)
+    else idhw = await updateHW(req.body)
+
+    res.redirect(`/account/update-hw${idhw}`)
+})
+
+//ADMIN STUFF
+router.post('/deletecourse', isLoggedIn, async function (req, res) {
+    Subject.findById(req.body.id, async (err, subject) => {
+        if (err || subject == null) {
+            res.status(200).send({ error: 'wrong id' })
+        } else if (req.body.subject != subject.subject || req.body.lastModify != subject.modifiedby[subject.modifiedby.length - 1].user) {
+            res.status(200).send({ error: 'wrong data' })
+        } else {
+            await Subject.updateOne({ _id: subject._id },
+                { enrolled: [] }
+            )
+            await User.updateMany({ $in: { enrolled: { id: subject._id } } }, {
+                $pull: {
+                    enrolled: { id: subject._id },
+                }
+            })
+        }
+    })
 })
 
 module.exports = router;

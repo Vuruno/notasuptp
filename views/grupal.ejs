@@ -21,10 +21,10 @@
             </thead>
             <tbody>
                 <% var arrGrades=[], arrMec=[]; var indexgrade = 0 %>
-                <% for (userGrade of subject.items[0].data[0].grades) { if (userGrade.user !=null) { indexgrade++%>
+                <% for (userGrade of subject.items[0].data[0].grades) { if (userGrade.user !=null && subject.enrolled.indexOf(userGrade.user) > -1) { indexgrade++%>
                     <tr>
                         <th>
-                            <% if (userGrade.user==user._id) { %>
+                            <% if (userGrade.user==user.googleId) { %>
                                 <a href="/account/course<%= subject._id %>" class="m-btn btn-sm btn-link">
                                     Me <i class="far fa-edit"></i>
                                 </a>
@@ -70,7 +70,7 @@
                         <% for (item of subject.items) { if (item.percentage != 0 && item.percentage != null) { for (data of item.data) { %>
                             <th>
                                 <% let avg = [] %>
-                                <% for (x of data.grades) { if(x.grade != null) { avg.push(x.grade) }} %>
+                                <% for (x of data.grades) { if(x.grade != null && subject.enrolled.indexOf(x.user) > -1) { avg.push(x.grade) }} %>
                                 <% if (avg.length != 0) { %> 
                                 <%= (avg.reduce((a, b)=> a + b) / avg.length).toFixed(1) %>
                                 <% } %>
@@ -78,7 +78,7 @@
                             <% }}} %>
                             <th id="avg_grade">
                                 <% let avg = [] %>
-                                <% for (x of subject.totalgrade) { if(x.grade != null) { avg.push(x.grade) }} %>
+                                <% for (x of subject.totalgrade) { if(x.grade != null && subject.enrolled.indexOf(x.user) > -1) { avg.push(x.grade) }} %>
                                 <% var grade = (avg.reduce((a, b)=> a + b) / avg.length).toFixed(1) %>
                                 <%= grade %>
                             </th>

@@ -9,19 +9,11 @@
         <table class="table table-hover">
           <tbody>
             <% subjects.forEach( function (subject) { %>
-              <% if (mySubjects.indexOf(String(subject._id)) < 0) {%>
+              <% if (subject.enrolled.indexOf(user.googleId) < 0) {%>
                 <tr>
-                  <th class="text-start">
-                    <a href="/account/updatesubject:<%= subject._id %>" class="py-0 btn btn-sm btn-outline-primary">
-                      <i class="far fa-edit"></i>
-                    </a>
-                  </th>
                   <th onclick="add('<%= subject._id %>', this)" onmouseover="overAdd(this)" onmouseout="out(this)">
                     <%= subject.subject %>
                   </th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
                 </tr>
                 <% } }) %>
           </tbody>
@@ -45,16 +37,14 @@
           <tbody>
             <% user.enrolled.forEach( function (subject) { %>
               <tr class="table-secondary" href="#">
-                <th class="text-start">
+                <th class="d-flex">
                   <a href="/account/updatesubject:<%= subject.id %>" class="py-0 btn btn-sm btn-light">
                     <i class="far fa-edit"></i>
                   </a>
-                </th>
-                <th onclick="remove('<%= subject.id %>', this)" onmouseover="overRemove(this)" onmouseout="out(this)">
-                  <%= subject.subject %>
-                <th></th>
-                <th></th>
-                <th></th>
+                  <div onclick="remove('<%= subject.id %>', this)" onmouseover="overRemove(this)"
+                    onmouseout="out(this)" class="m-auto">
+                    <%= subject.subject %>
+                  </div>
               </tr>
               <% }) %>
           </tbody>
@@ -70,11 +60,11 @@
 <div class="col-1"></div>
 </div>
 
-<form action="/account/add" method="post" id="add" hidden>
+<form action="/account/addsubject" method="post" id="add" hidden>
   <input type="text" name="idadd" id="idadd">
 </form>
 
-<form action="/account/remove" method="post" id="remove" hidden>
+<form action="/account/removesubject" method="post" id="remove" hidden>
   <input type="text" name="idremove" id="idremove">
 </form>
 

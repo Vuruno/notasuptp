@@ -12,8 +12,8 @@ let currentUri = window.location.href
 currentUri = window.location.href.split(':')
 currentUri = currentUri[currentUri.length - 1]
 
-//If 'settled' hasn't been settled or passed more than 5 minutes (300000ms) since last check
-if ((isNaN(settled) || (Date.now() - settled) > 300000) && currentUri != 'logout') {
+//If 'settled' has not been settled or passed more than 5 minutes (300000ms) since last check
+if ((isNaN(settled) || (Date.now() - settled) > 3) && currentUri != 'logout') {
     console.log('verifying saved identity')
     const options = {
         method: 'POST',
@@ -36,7 +36,7 @@ if ((isNaN(settled) || (Date.now() - settled) > 300000) && currentUri != 'logout
         });
 }
 setTimeout(function () {
-    //Don't reload if user_id isn't settled and navbar says 'UPTP'
+    //Do not reload if user_id is not settled and navbar says 'UPTP'
     if ((user_id == null ||
         user_id == undefined ||
         user_id == 'undefined' ||
@@ -44,7 +44,7 @@ setTimeout(function () {
         user_id == "''" ||
         user_id == '""') &&
         document.getElementById('myNaveNavBar').innerText == 'UPTP') return
-    //Don't reload if user_id is settled and navbar doesn't says 'UPTP'
+    //Do not reload if user_id is settled and navbar does not says 'UPTP'
     if (!(user_id == null ||
         user_id == undefined ||
         user_id == 'undefined' ||

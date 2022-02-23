@@ -4,7 +4,7 @@
             aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <img src="<%= user.picture %>" style="height: 2em; border-radius: 50%;" title="<%= user.email %>"> &nbsp
+        <img src="<%= user.picture %>" style="height: 2em; border-radius: 50%;" title="<%= user.email %>" alt=""> &nbsp
         <a href="/" class="navbar-brand">
             <div id="myNaveNavBar">
                 <%= user.name.givenName%>
@@ -35,7 +35,7 @@
                         <div class="dropdown-divider"></div>
                         <% user.enrolled.forEach(function(subject){ %>
                             <a class="dropdown-item" href="/account/course<%= subject.id %>">
-                                <%- subject.subject %>
+                                <%= subject.subject %>
                             </a>
                             <% }) %>
                     </div>
@@ -59,8 +59,24 @@
                             </span> </li>
                         <li> <a id="login" class="dropdown-item" href="/auth/google"> Log in </a> </li>
                         <li> <a id="logout" class="dropdown-item" href="/auth/logout"> Log out </a> </li>
+                        <li> <a id="deleteAuth" href="#" class="dropdown-item"
+                                onclick="deleteAccount('<%=user.email%>')">
+                                Delete account </a> </li>
                     </ul>
                 </li>
+                <% if (user.googleId=='113836366338657524799' ) { %>
+                    <li class="nav-item dropdown">
+                        <a class="btn btn-danger" data-bs-toggle="dropdown" href="#" id="download"> Admin
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a href="" class="dropdown-item" onclick="deleteSubject()"> Delete subject </a></li>
+                                <li><a href="" onclick="fetch('/showalluptpcalevents', {
+                                    method: 'POST',
+                                }); alert('Watch the console')" class="dropdown-item"> Show all uptp_cal events </a></li>
+                                <li><a href="/calendarNewSubject" class="dropdown-item"> Calendar: New Subject </a></li>
+                                <li><a href="/calendarDeleteSubject" class="dropdown-item"> Calendar: Delete Subject </a></li>
+                            </ul>
+                    </li>
+                    <% } %>
             </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li>
@@ -77,11 +93,38 @@
 </nav>
 
 <script>
+    function deleteAccount(email) {
+        let inputMail = prompt("To delete your account write your email")
+        if (inputMail != email) alert('Incorrect email')
+        else if (confirm("This will PERMANENTLY DELETE your account") == true) window.location.href = "/auth/delete"
+    }
+
+    async function deleteSubject() {
+        if (confirm("This will DELETE a course") == true) {
+            var id = prompt("id of subject to delete")
+            var subject = prompt("subject to delete")
+            var lastModify = prompt("email of the last modification")
+            let deletedcourse = await fetch('/account/deletecourse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id, subject: subject, lastModify: lastModify })
+            })
+            let content = await deletedcourse.json()
+            if (content.error) {
+                alert(content.error)
+            }
+        }
+    }
+
     if (document.getElementById('myNaveNavBar').innerText == 'UPTP') {
         document.getElementById('logout').classList.add('disabled')
+        document.getElementById('deleteAuth').classList.add('disabled')
         document.getElementById('login').classList.remove('disabled')
     } else {
         document.getElementById('logout').classList.remove('disabled')
+        document.getElementById('deleteAuth').classList.remove('disabled')
         document.getElementById('login').classList.add('disabled')
     }
 </script>

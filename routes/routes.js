@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { isLoggedIn, isntLoggedIn } = require('../settings/isAuth');
+const { isLoggedIn, isntLoggedIn, isAdmin } = require('../settings/isAuth');
 const Subject = require('../models/Subject')
 const calendar = require('../settings/calendarapi')
 
@@ -16,7 +16,7 @@ router.get('/', async function (req, res) {
         user: req.user || empyUser,
         allSubjects: await Subject.find(),
         weekSchedule: await calendar.getWeek(),
-        allHw: await calendar.allHW()
+        allHw: await calendar.allHW(req.user || empyUser)
     })
 })
 
@@ -35,6 +35,31 @@ router.get('/tables', function (req, res) {
 router.post('/subscribe', async (req, res) => {
     global.pushSubscripton = req.body;
     res.status(200).json()
+})
+
+//ADMIN STUFF
+router.post('/showalluptpcalevents', isAdmin, async function (req, res) {
+    console.log('all uptp calendar events:')
+    let allEvents = await calendar.allUptpCal()
+    console.log(allEvents)
+})
+
+router.get('/calendarNewSubject', isAdmin, async function (req, res) {
+    res.render('calendarNewSubject', {user: req.user || empyUser, allSubjects : await Subject.find()})
+})
+
+router.get('/calendarDeleteSubject', isAdmin, async function (req, res) {
+    res.render('calendarDeleteSubject', {user: req.user || empyUser, allSubjects : await Subject.find()})
+})
+
+router.post('/calNewSubject', isAdmin, async function (req, res) {
+    await calendar.newSubject(req.body)
+    res.redirect('/calendarNewSubject')
+})
+
+router.post('/calDeleteSubject', isAdmin, async function (req, res) {
+    await calendar.deleteSubject(req.body)
+    res.redirect('/calendarDeleteSubject')
 })
 
 module.exports = router;

@@ -34,7 +34,7 @@
                                         <% let total=0 %>
                                             <% let grade=0 %>
                                                 <% for(each of item.data) { %>
-                                                    <% for (usergrade of each.grades) { if (usergrade.user==user._id) {
+                                                    <% for (usergrade of each.grades) { if (usergrade.user==user.googleId) {
                                                         grade=grade + usergrade.grade }}%>
                                                         <% total=total + Number(each.total) %>
                                                             <% } %>

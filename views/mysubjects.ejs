@@ -4,7 +4,7 @@
         <div class="col">
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header">
-                    <a href="/account/<%= index.id %>" class="text-decoration-none text-reset"> <%= index.subject %> </a>
+                    <a href="/account/course<%= index.id %>" class="text-decoration-none text-reset"> <%= index.subject %> </a>
                 </div>
                 <div class="card-body px-0 py-1">
                     <div class="card-text">
@@ -24,7 +24,7 @@
                                                 <% let total = 0 %>
                                                 <% let grade = 0 %>
                                                 <% for(each of item.data) { %>
-                                                    <% for (usergrade of each.grades) { if (usergrade.user == user._id) { grade = grade + usergrade.grade }}%>
+                                                    <% for (usergrade of each.grades) { if (usergrade.user == user.googleId) { grade = grade + usergrade.grade }}%>
                                                     <% total = total + Number(each.total) %>
                                                 <% } %>
                                                 <%= Math.round(grade) %>/<%= total %>

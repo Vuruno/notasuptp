@@ -3,17 +3,18 @@
         <hr>
         <% if(user.name.givenName=='UPTP' ) { %>
             <h1 class="page-header">
-            <i class="fas fa-exclamation-triangle text-warning"></i> This subject doesn't exists
-            <i class="fas fa-exclamation-triangle text-warning"></i>
+                <i class="fas fa-exclamation-triangle text-warning"></i> This subject does not exists
+                <i class="fas fa-exclamation-triangle text-warning"></i>
             </h1>
             <div class="span mb-3"> Check the subjects by <a href="/auth/google"> sign in </a></div>
             <% } else { %>
                 <h1 class="page-header">
                     <i class="fas fa-exclamation-triangle text-warning"></i>
-                    This subject doesn't exists <br> or you aren't enrolled in
+                    This subject does not exist <br> or you are not enrolled in
                     <i class="fas fa-exclamation-triangle text-warning"></i>
                 </h1>
-                <div class="span mb-3"> Go to <a href="/account/courses"> my subjects </a></div>
+                <div class="span mb-3"> If you are enrolled in, try to update your grades <br>
+                    Go to <a href="/account/courses"> my subjects </a></div>
                 <% } %>
                     <hr>
     </div>

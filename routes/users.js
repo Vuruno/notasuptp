@@ -32,6 +32,15 @@ router.get('/logout', (req, res) => {
     res.redirect('/welcome:logout');
 });
 
+router.get('/delete', async function (req, res) {
+    //delete user document
+    await User.deleteOne({_id: req.user._id})
+    req.logout();
+    req.session.destroy();
+
+    res.redirect('/welcome:logout');
+});
+
 router.get('/google/failure', (req, res) => {
     res.send('Failed to authenticate..');
 });
@@ -46,7 +55,7 @@ router.post('/remember', async function (req, res, next) {
     if (user == null) { //If not user registered
         if (req.isAuthenticated()) { //Verify in backend if registered
             res.status(200).send({ user: req.user })
-        } else { //User hasn't authenticated
+        } else { //User has not authenticated
             req.logIn(empyUser, (err) => { })
             res.status(200).send({ user: empyUser })
         }

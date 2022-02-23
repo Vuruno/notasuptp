@@ -1,0 +1,41 @@
+Name must be exactly the same for a lot of functionalities (also the uppercase) <br>
+<% for (subject of allSubjects) { %>
+    - <%=subject.subject%> <br>
+        <% } %>
+
+            <form action="/calNewSubject" method="post" id="my-form">
+                <label for="subject"> Subject: </label>
+                <input type="text" id="subject" name="subject" required> <br>
+                <label for="day"> Day: </label>
+                <select name="day" id="day">
+                    <option value="0"> Sunday </option>
+                    <option value="1"> Monday </option>
+                    <option value="2"> Tuesday </option>
+                    <option value="3"> Wednesday </option>
+                    <option value="4"> Thursday </option>
+                    <option value="5"> Friday </option>
+                    <option value="6"> Saturday </option>
+                    <option value="everyday"> Everyday </option>
+                </select><br>
+                <label for="allDay"> All day?</label>
+                <input type="checkbox" name="allDay" id="allDay"><br>
+                <label for="start"> Start: </label>
+                <input type="time" name="start" id="start" required> <br>
+                <label for="end"> End: </label>
+                <input type="time" name="end" id="name" required><br>
+                <label for="from"> From: </label>
+                <input type="date" name="from" id="from" required><br>
+                <label for="to"> To: </label>
+                <input type="date" name="to" id="to" required> <br>
+                <label for="description"> Description: </label>
+                <input type="text" name="description" id="description">
+
+                <button type="submit"> Submit </button>
+            </form>
+
+            <script>
+                document.getElementById('my-form').onsubmit(function (e) {
+                    e.preventDefault();
+                    // do something
+                });
+            </script>

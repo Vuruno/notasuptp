@@ -26,7 +26,8 @@ const SubjectSchema = new mongoose.Schema({
     totalgrade: [{
         grade: { type: Number, default: null },
         user: { type: String, default: null }
-    }]
+    }],
+    enrolled: [String]
 });
 
 SubjectSchema.plugin(findOrCreate);
