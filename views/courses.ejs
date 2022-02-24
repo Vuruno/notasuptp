@@ -12,7 +12,8 @@
               <% if (subject.enrolled.indexOf(user.googleId) < 0) {%>
                 <tr>
                   <th onclick="add('<%= subject._id %>', this)" onmouseover="overAdd(this)" onmouseout="out(this)">
-                    <%= subject.subject %>
+                    <%= subject.subject %> <br>
+                    <%= subject.enrolled%> | <%=user.googleId%> : <%= subject.enrolled.indexOf(user.googleId) %>
                   </th>
                 </tr>
                 <% } }) %>

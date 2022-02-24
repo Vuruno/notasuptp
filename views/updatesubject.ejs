@@ -2,7 +2,7 @@
     <div class="col"></div>
     <div class="col-9">
         <%- include ("./partials/messages"); %>
-            <form action="/account/updatesubject" method="post">
+            <form action="/account/updatesubject" method="post" id="subject-form">
                 <input type="text" id="id" name="id" value="<%= typeof id != 'undefined' ? id : null %>" hidden>
                 <fieldset>
                     <div class="row">
@@ -274,8 +274,8 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-3">
-                            <button type="submit" class="btn btn-primary mb-5"> Save </button>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary mb-5" id="savebutton"> Save </button>
                             <button type="button" onclick="location.href = '/account/'" class="btn btn-secondary mb-5"> Cancel </button>
                         </div>
                         <% if (typeof id !='undefined' ) { %>
@@ -296,4 +296,11 @@
 
 <script>
     document.getElementById(`sem_${"<%= typeof semester != 'undefined' ? semester : '' %>"}`).selected = 'selected'
+</script>
+
+<script>
+    document.getElementById('subject-form').addEventListener('submit', function (evt) {
+        let that = document.getElementById('savebutton')
+        that.innerHTML = `<div class="spinner-border text-light spinner-border-sm" role="status"></div> Saving`
+    })
 </script>

@@ -188,6 +188,60 @@ async function getHW(id) {
     return hw
 }
 
+async function updateSubjectName(prevsubject, subject) {
+    let min = new Date()
+    let max = new Date()
+    min.setDate(1)
+    min.setMonth(1)
+    max.setDate(31)
+    max.setMonth(12)
+
+    //Update the UPTP events
+    var uptpEvents = await calendar.events.list({
+        calendarId: uptp_cal,
+        timeMin: min,
+        timeMax: max
+    })
+
+    for (evt of uptpEvents.data.items) {
+        if (evt.summary == prevsubject) {
+            await calendar.events.update({
+                calendarId: uptp_cal,
+                eventId: evt.id,
+                resource: {
+                    summary: subject,
+                    start: evt.start,
+                    end: evt.end,
+                    description: evt.description
+                }
+            })
+        }
+    }
+
+    //Update the HW events
+    var hwEvents = await calendar.events.list({
+        calendarId: hw_cal,
+        timeMin: min,
+        timeMax: max
+    })
+
+    for (evt of hwEvents.data.items) {
+        if (evt.summary.split(':')[0] == prevsubject) {
+            await calendar.events.update({
+                calendarId: hw_cal,
+                eventId: evt.id,
+                resource: {
+                    summary: `${subject}: ${evt.summary.split(':')[1]}`,
+                    start: evt.start,
+                    end: evt.end,
+                    description: evt.description
+                }
+            })
+        }
+    }
+}
+
+//ADMIN STUFF
 function getDates(from, to, day) {
     from = dateparse(`${from} 00:00`)
     to = dateparse(`${to} 00:00`)
@@ -272,4 +326,4 @@ async function deleteSubject(body) {
     }
 }
 
-module.exports = { getWeek, allHW, allUptpCal, createHW, updateHW, deleteHW, getHW, newSubject, deleteSubject }
+module.exports = { getWeek, allHW, allUptpCal, createHW, updateHW, deleteHW, getHW, newSubject, deleteSubject, updateSubjectName }

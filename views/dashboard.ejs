@@ -1,5 +1,13 @@
 <h1> <br> </h1>
 
+<% if (user.name.givenName=='UPTP' ) { %>
+    <div class="alert alert-dark alert-dismissible fade show mt-3" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <a href="/auth/google" class="alert-link"> Sign in </a> to see more personalized information.
+        <br> You can still use the page this way
+    </div>
+    <% } %>
+
 <h3 id="meetings"> Links of meetings (online classes)</h3>
 <div class="row row-cols-auto">
     <% for( myClass of user.enrolled ) { %>

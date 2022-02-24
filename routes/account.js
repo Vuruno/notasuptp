@@ -5,7 +5,7 @@ const Subject = require('../models/Subject')
 const User = require('../models/User');
 const req = require('express/lib/request');
 const { redirect } = require('express/lib/response');
-const { createHW, updateHW, getHW, deleteHW, allHW } = require('../settings/calendarapi')
+const { createHW, updateHW, getHW, deleteHW, allHW, updateSubjectName } = require('../settings/calendarapi')
 
 const empyUser = { googleId: "", picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png", name: { givenName: "UPTP", familyName: "" }, email: "", enrolled: [] }
 
@@ -142,11 +142,15 @@ router.get('/update-hw:id', isLoggedIn, async function (req, res) {
     if (hw != null) {
         let end = new Date(hw.data.end.dateTime)
         let desc = hw.data.description.split('http')
+        let endminutes = end.getMinutes()
+        let endhours = end.getHours()
+        if (Number(endminutes)<10) endminutes = `0${endminutes}`
+        if (Number(endhours)<10) endhours = `0${endhours}`
 
         var subject = hw.data.summary.split(':')[0].trim(),
             title = hw.data.summary.split(':')[1].trim(),
             date = `${hw.data.end.dateTime.split('T')[0]}`,
-            time = `${end.getHours()}:${end.getMinutes()}`,
+            time = `${endhours}:${endminutes}`,
             description = desc.slice(0, desc.length - 1),
             link = `http${desc[desc.length - 1]}`
         if (link.trim() == 'http') link = ''
@@ -409,6 +413,12 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         }
 
         if (id != '') grades = tempSubject.totalgrade
+
+        var enrolled = []
+        if (id != '') {
+            enrolled = tempSubject.enrolled
+        }
+
         let updatesubject = {
             subject: subject,
             meeting: meeting,
@@ -416,7 +426,8 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
             semester: semester,
             modifiedby: modifiedby,
             items: itemArray,
-            totalgrade: grades
+            totalgrade: grades,
+            enrolled: enrolled
         }
         const saveSubject = new Subject(updatesubject)
 
@@ -426,16 +437,22 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         } else {
             await Subject.findOneAndReplace({ '_id': id }, updatesubject)
 
-            //Update name of subjects in User
-            await User.updateMany({ $in: { enrolled: { id: id } } }, {
-                enrolled: { id: id, subject: subject },
-            })
+            // Change name of the subject
+            if (subject != tempSubject.subject) {
+                //Update name of subjects in User
+                await User.updateMany({ $in: { enrolled: { id: id } } }, {
+                    enrolled: { id: id, subject: subject },
+                })
 
-            for (i of req.user.enrolled) {
-                if (i.id == id) {
-                    i.id = id
-                    i.subject = subject
+                for (i of req.user.enrolled) {
+                    if (i.id == id) {
+                        i.id = id
+                        i.subject = subject
+                    }
                 }
+
+                //pdate name of subjects into calendars
+                await updateSubjectName(tempSubject.subject, subject)
             }
         }
 
