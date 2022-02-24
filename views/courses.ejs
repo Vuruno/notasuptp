@@ -12,8 +12,7 @@
               <% if (subject.enrolled.indexOf(user.googleId) < 0) {%>
                 <tr>
                   <th onclick="add('<%= subject._id %>', this)" onmouseover="overAdd(this)" onmouseout="out(this)">
-                    <%= subject.subject %> <br>
-                    <%= subject.enrolled%> | <%=user.googleId%> : <%= subject.enrolled.indexOf(user.googleId) %>
+                    <%= subject.subject %>
                   </th>
                 </tr>
                 <% } }) %>
@@ -36,16 +35,22 @@
       <div class="card-body pb-0">
         <table class="table table-hover">
           <tbody>
+            <tr>
+              <th> edit </th> <th></th> <th></th> <th>subject to remove</th> <th></th> <th></th>
+              </tr>
             <% user.enrolled.forEach( function (subject) { %>
               <tr class="table-secondary" href="#">
-                <th class="d-flex">
+                <th>
                   <a href="/account/updatesubject:<%= subject.id %>" class="py-0 btn btn-sm btn-light">
                     <i class="far fa-edit"></i>
                   </a>
+                </th>
+                  <th colspan="5">
                   <div onclick="remove('<%= subject.id %>', this)" onmouseover="overRemove(this)"
                     onmouseout="out(this)" class="m-auto">
                     <%= subject.subject %>
                   </div>
+                </th>
               </tr>
               <% }) %>
           </tbody>
