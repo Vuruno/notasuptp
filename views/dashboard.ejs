@@ -249,42 +249,42 @@
                                                                 </a>
                                                                 <% if(hw.description !=undefined &&
                                                                     hw.description.split('http')[1] !=undefined) { %>
-                                                                    <a target="_blank" class="text-light"
+                                                                    <a target="_blank" class="text-white"
                                                                         href="<%= 'http'+ hw.description.split('http')[1].split(' ')[0] %>">
                                                                         <%=hw.summary.split(':')[0].toUpperCase()%>
                                                                     </a>
                                                                     <% } else { %>
-                                                                        <%=hw.summary.split(':')[0].toUpperCase()%>
-                                                                            <% } %>
-                                                                            
-                                                                                <div class="text-muted">
-                                                                                    <% if (!isNaN(end.getDate())) { %>
-                                                                                        <% var minutes=end.getMinutes();
-                                                                                            if (Number(end.getMinutes())
-                                                                                            < 10)
-                                                                                            {minutes=`0${end.getMinutes()}`}%>
-                                                                                            <%=weekday[end.getDay()]%>
-                                                                                                <%=end.getDate()%> /
-                                                                                                    <%=end.getMonth()%>
-                                                                                                        &nbsp
-                                                                                                        <%=end.getHours()%>
-                                                                                                            :
-                                                                                                            <%=minutes%>
-                                                                                                                <% } else
-                                                                                                                    { %>
-                                                                                                                    <% end=new
-                                                                                                                        Date(hw.end.date)
-                                                                                                                        %>
-                                                                                                                        <%=end.getDate()%>
-                                                                                                                            /
-                                                                                                                            <%=end.getMonth()%>
-                                                                                                                                /
-                                                                                                                                <%=end.getFullYear()%>
-                                                                                                                                    &nbsp
-                                                                                                                                    23:59
-                                                                                                                                    <% }
-                                                                                                                                        %>
-                                                                                </div>
+                                                                        <div class="text-white">
+                                                                            <%=hw.summary.split(':')[0].toUpperCase()%>
+                                                                                <% } %>
+                                                                        </div>
+
+                                                                        <div class="text-muted">
+                                                                            <% if (!isNaN(end.getDate())) { %>
+                                                                                <% var minutes=end.getMinutes(); if
+                                                                                    (Number(end.getMinutes()) < 10)
+                                                                                    {minutes=`0${end.getMinutes()}`}%>
+                                                                                    <%=weekday[end.getDay()]%>
+                                                                                        <%=end.getDate()%> /
+                                                                                            <%=end.getMonth()%>
+                                                                                                &nbsp
+                                                                                                <%=end.getHours()%>
+                                                                                                    :
+                                                                                                    <%=minutes%>
+                                                                                                        <% } else { %>
+                                                                                                            <% end=new
+                                                                                                                Date(hw.end.date)
+                                                                                                                %>
+                                                                                                                <%=end.getDate()%>
+                                                                                                                    /
+                                                                                                                    <%=end.getMonth()%>
+                                                                                                                        /
+                                                                                                                        <%=end.getFullYear()%>
+                                                                                                                            &nbsp
+                                                                                                                            23:59
+                                                                                                                            <% }
+                                                                                                                                %>
+                                                                        </div>
                                                             </td>
                                                             <% if(hw.description !=undefined) { %>
                                                                 <td>
@@ -330,9 +330,7 @@
                             <script>
                                 for (i = 0; i < 8; i++) {
                                     let element = document.getElementById(`hwday${i}`)
-                                    console.log(i, element)
                                     if (element != null) {
-                                        console.log(i, element.innerText)
                                         if (element.innerText == 'Homeworks') {
                                             element.hidden = true
                                         }

@@ -23,11 +23,13 @@ router.get('/', isLoggedIn, async function (req, res) {
 })
 
 router.get('/mygrades', isLoggedIn, async function (req, res) {
-    res.render('mygrades', { user: req.user || empyUser, allSubjects: await Subject.find() })
+    if (req.user.enrolled.length < 1) res.redirect('/account/courses')
+    else res.render('mygrades', { user: req.user || empyUser, allSubjects: await Subject.find() })
 })
 
 router.get('/grupal', isLoggedIn, async function (req, res) {
-    res.render('dashboardgrupal', { user: req.user || empyUser, allSubjects: await Subject.find() })
+    if (req.user.enrolled.length < 1) res.redirect('/account/courses')
+    else res.render('dashboardgrupal', { user: req.user || empyUser, allSubjects: await Subject.find() })
 })
 
 router.get('/courses', isLoggedIn, async function (req, res) {
@@ -144,8 +146,8 @@ router.get('/update-hw:id', isLoggedIn, async function (req, res) {
         let desc = hw.data.description.split('http')
         let endminutes = end.getMinutes()
         let endhours = end.getHours()
-        if (Number(endminutes)<10) endminutes = `0${endminutes}`
-        if (Number(endhours)<10) endhours = `0${endhours}`
+        if (Number(endminutes) < 10) endminutes = `0${endminutes}`
+        if (Number(endhours) < 10) endhours = `0${endhours}`
 
         var subject = hw.data.summary.split(':')[0].trim(),
             title = hw.data.summary.split(':')[1].trim(),

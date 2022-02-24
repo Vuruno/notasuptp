@@ -48,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 global.pushSubscripton
 require('./settings/sendNotification.js')
 require('./settings/calendarapi')
+// get new hws
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`)

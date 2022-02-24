@@ -17,7 +17,6 @@ const { OAuth2 } = google.auth;
 const oAuth2Client = new OAuth2(clientId, clientSecret);
 oAuth2Client.setCredentials({ refresh_token: refreshToken });
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
-const UTC = process.env.UTC
 
 //SORT BY START (ms)
 function order(eventsArray) {
@@ -326,4 +325,4 @@ async function deleteSubject(body) {
     }
 }
 
-module.exports = { getWeek, allHW, allUptpCal, createHW, updateHW, deleteHW, getHW, newSubject, deleteSubject, updateSubjectName }
+module.exports = { getWeek, allHW, allUptpCal, createHW, updateHW, deleteHW, getHW, newSubject, deleteSubject, updateSubjectName}
