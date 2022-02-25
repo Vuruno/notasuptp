@@ -86,7 +86,7 @@ router.get('/updatesubject', isLoggedIn, function (req, res) {
 router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
     let subjectToEdit = await Subject.findOne({ _id: req.params.id.slice(1, req.params.id.length + 1) })
 
-    let tot_midterm = [], per_each_midterm = [], tot_hw = [], per_each_hw = []
+    let tot_midterm = [], tot_quiz = [], per_each_midterm = [], per_each_quiz = [], tot_hw = [], per_each_hw = []
     let id = req.params.id.slice(1, req.params.id.length + 1)
 
     let subject = subjectToEdit.subject
@@ -101,6 +101,12 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
     subjectToEdit.items[1].data.forEach(function (x) {
         tot_midterm.push(x.total)
         per_each_midterm.push(x.percentage)
+    })
+
+    let per_quiz = subjectToEdit.items[6].percentage
+    subjectToEdit.items[6].data.forEach(function (x) {
+        tot_quiz.push(x.total)
+        per_each_quiz.push(x.percentage)
     })
 
     let per_hw = subjectToEdit.items[2].percentage
@@ -122,6 +128,7 @@ router.get('/updatesubject:id', isLoggedIn, async function (req, res) {
         user: req.user, id,
         subject, meeting, classroom, semester, per_final, tot_final,
         per_midterm, tot_midterm, per_each_midterm,
+        per_quiz, tot_quiz, per_each_quiz,
         per_hw, tot_hw, per_each_hw,
         per_la, tot_la,
         per_attendance, tot_attendance,
@@ -171,71 +178,97 @@ router.get('/delete-hw:id', isLoggedIn, async function (req, res) {
 
 //POSTS
 router.post('/updatesubject', isLoggedIn, async function (req, res) {
-    var { id, subject, semester, per_final, tot_final, per_midterm, tot_midterm,
-        per_each_midterm, per_hw, tot_hw, per_each_hw, per_la, tot_la,
-        per_attendance, tot_attendance, per_bonus, tot_bonus, meeting, classroom } = req.body
+    //get data from updatesubject.ejs
+    var { id, subject, semester,
+        per_final, tot_final,
+        per_midterm, tot_midterm, per_each_midterm,
+        per_quiz, tot_quiz, per_each_quiz,
+        per_hw, tot_hw, per_each_hw,
+        per_la, tot_la,
+        per_attendance, tot_attendance,
+        per_bonus,tot_bonus,
+        meeting, classroom } = req.body
 
     semester = Number(semester)
-
+    // set all data into arrays, initialize sums of percentages
     subject = subject.toUpperCase()
     let errors = []
     tot_midterm = tot_midterm.split(',')
+    tot_quiz = tot_quiz.split(',')
     tot_hw = tot_hw.split(',')
     per_each_midterm = per_each_midterm.split(',')
+    per_each_quiz = per_each_quiz.split(',')
     per_each_hw = per_each_hw.split(',')
-    let tot_per_ech_midterm = 0, tot_per_ech_hw = 0
+    let tot_per_ech_midterm = 0, tot_per_ech_quiz = 0, tot_per_ech_hw = 0
 
+    //Convert all strings to numbers
     for (x of tot_midterm) x = Number(x)
+    for (x of tot_quiz) x = Number(x)
     for (x of tot_hw) x = Number(x)
     for (x of per_each_midterm) x = Number(x)
+    for (x of per_each_quiz) x = Number(x)
     for (x of per_each_hw) x = Number(x)
 
+    //The sum of percentages must be 100%
     let totalpercentage = Number(per_final) + Number(per_hw) + Number(per_la)
-        + Number(per_midterm) + Number(per_attendance)
+        + Number(per_midterm) + Number(per_quiz) + Number(per_attendance)
     if (totalpercentage != 100) {
-        errors.push(`Error: The sum of percentages is ${totalpercentage}.`)
+        errors.push(`Error: The sum of percentages is ${totalpercentage}%.`)
     }
 
+    //If a grade is set, also should be the percentage
+    //The same the other way around
     if (toEmpy(per_final) != '' && toEmpy(tot_final) == '') {
         errors.push(`Error in FINAL EXAM: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_final) == '' && toEmpy(tot_final) != '') {
-        errors.push(`Error in FINAL EXAM:  Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in FINAL EXAM:  Set the percentage, or let empy the max grade.`)
     }
     if (toEmpy(per_midterm) != '' && toEmpy(tot_midterm) == '') {
         errors.push(`Error in MIDTERM: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_midterm) == '' && toEmpy(tot_midterm) != '') {
-        errors.push(`Error in MIDTERM: Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in MIDTERM: Set the percentage, or let empy the max grade.`)
+    }
+    if (toEmpy(per_quiz) != '' && toEmpy(tot_quiz) == '') {
+        errors.push(`Error in QUIZZES: Set the max grade, or left empy the percentage.`)
+    }
+    if (toEmpy(per_quiz) == '' && toEmpy(tot_quiz) != '') {
+        errors.push(`Error in QUIZZES: Set the percentage, or let empy the max grade.`)
     }
     if (toEmpy(per_hw) != '' && toEmpy(tot_hw) == '') {
         errors.push(`Error in HOMEWORKS: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_hw) == '' && toEmpy(tot_hw) != '') {
-        errors.push(`Error in HOMEWORKS: Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in HOMEWORKS: Set the percentage, or let empy the max grade.`)
     }
     if (toEmpy(per_la) != '' && toEmpy(tot_la) == '') {
         errors.push(`Error in LEARNING ATTITUDE: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_la) == '' && toEmpy(tot_la) != '') {
-        errors.push(`Error in LEARNING ATTITUDE: Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in LEARNING ATTITUDE: Set the percentage, or let empy the max grade.`)
     }
     if (toEmpy(per_attendance) != '' && toEmpy(tot_attendance) == '') {
         errors.push(`Error in LEARNING ATTENDANCE: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_attendance) == '' && toEmpy(tot_attendance) != '') {
-        errors.push(`Error in LEARNING ATTENDANCE: Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in LEARNING ATTENDANCE: Set the percentage, or let empy the max grade.`)
     }
     if (toEmpy(per_bonus) != '' && toEmpy(tot_bonus) == '') {
         errors.push(`Error in BONUS: Set the max grade, or left empy the percentage.`)
     }
     if (toEmpy(per_bonus) == '' && toEmpy(tot_bonus) != '') {
-        errors.push(`Error in BONUS: Set the pocentaje, or let empy the max grade.`)
+        errors.push(`Error in BONUS: Set the percentage, or let empy the max grade.`)
     }
 
+    //The percentage per each element can by empy, buty if not or there aren't number in it, is an error
     for (x of per_each_midterm) {
         if (isNaN(x)) errors.push(`Error in MIDTERM: In percentages just put commas and numbers.`)
         else tot_per_ech_midterm = tot_per_ech_midterm + Number(x)
+    }
+    for (x of per_each_quiz) {
+        if (isNaN(x)) errors.push(`Error in QUIZZES: In percentages just put commas and numbers.`)
+        else tot_per_ech_quiz = tot_per_ech_quiz + Number(x)
     }
     for (x of per_each_hw) {
         if (isNaN(x)) errors.push(`Error in HOMEWORK: In percentages just put commas and numbers.`)
@@ -244,15 +277,24 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
     for (x of tot_midterm) {
         if (isNaN(x)) errors.push(`Error in MIDTERM: In grades just put commas and numbers.`)
     }
+    for (x of tot_quiz) {
+        if (isNaN(x)) errors.push(`Error in QUIZZES: In grades just put commas and numbers.`)
+    }
     for (x of tot_hw) {
         if (isNaN(x)) errors.push(`Error in HOMEWORK: In grades just put commas and numbers.`)
     }
 
+    //Percentages can be zero, but if not their sum is to be the same as the total of the item
     if (tot_per_ech_hw != 0 && Math.abs(tot_per_ech_hw - per_hw) > 1) errors.push(`Error in HOMEWORK: The sum of the percentage is not the same as the percentage of the HW.`)
     if (tot_per_ech_midterm != 0 && Math.abs(tot_per_ech_midterm - per_midterm) > 1) errors.push(`Error in MIDTERM: The sum of the percentage is not the same as the percentage of the MID.`)
+    if (tot_per_ech_quiz != 0 && Math.abs(tot_per_ech_quiz - per_quiz) > 1) errors.push(`Error in QUIZZES: The sum of the percentage is not the same as the percentage of the MID.`)
 
+    //We have to have the same number of percentages that of grades
     if (per_each_midterm.length != tot_midterm.length) {
         if (per_each_midterm[0] != '') errors.push(`Error in MIDTERM: The quantity of percentages and grades are not the same.`)
+    }
+    if (per_each_quiz.length != tot_quiz.length) {
+        if (per_each_quiz[0] != '') errors.push(`Error in QUIZZES: The quantity of percentages and grades are not the same.`)
     }
     if (per_each_hw.length != tot_hw.length) {
         if (per_each_hw[0] != '') errors.push(`Error in HOMEWORK: The quantity of percentages and grades are not the same.`)
@@ -267,22 +309,35 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
             id, user: req.user,
             errors, subject, semester, per_final, tot_final,
             per_midterm, tot_midterm, per_each_midterm,
+            per_quiz, tot_quiz, per_each_quiz,
             per_hw, tot_hw, per_each_hw,
             per_la, tot_la,
             per_attendance, tot_attendance,
             per_bonus, tot_bonus, meeting, classroom
         });
     }
-    // GUARDAR ASIGNATURA
+    // ---------------------------
+    // if not errors, SAVE SUBJECT
+    // ---------------------------
     else {
+        // if we're updating, get data to compare
         if (id != '') var tempSubject = await Subject.findOne({ _id: id })
+        // initialize to use if the subject is new
         var itemArray = []
         var grades = [{ user: null, grade: null }]
 
-        if (per_each_midterm[''] == null && tot_midterm[0] != '') {
+        //If per_each_midterm is empy, then every item shall have the same percentage
+        if (per_each_midterm[0] == '' && tot_midterm[0] != '') {
             per_each_midterm = []
             for (i in tot_midterm) {
                 per_each_midterm.push(Number(per_midterm) / tot_midterm.length)
+            }
+        }
+
+        if (per_each_quiz[0] == '' && tot_quiz[0] != '') {
+            per_each_quiz = []
+            for (i in tot_quiz) {
+                per_each_quiz.push(Number(per_quiz) / tot_quiz.length)
             }
         }
 
@@ -307,14 +362,18 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         })
 
         //ADD MIDTERM
+        //data is the prototype of what is send into the db
         let data = []
+        //for each midterm we're using an element into an array called data[]
         for (i in tot_midterm) {
+            //subject is updated, we're copying the grades already in the db
             if (id != '' && tempSubject.items[1].data[i] != undefined) grades = tempSubject.items[1].data[i].grades
+            // if is new, we create an elmpy first grade
             else for (elem of grades) elem.grade = null
             data.push({
                 percentage: per_each_midterm[i],
                 total: tot_midterm[i],
-                index: i,
+                index: i, //index is required to do the consult to the db
                 grades: grades
             })
         }
@@ -405,6 +464,29 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
                     grades: grades
                 }]
         })
+
+        //ADD QUIZZES
+        data = []
+        for (i in tot_quiz) {
+            if (id != '' && tempSubject.items[6].data[i] != undefined) grades = tempSubject.items[6].data[i].grades
+            else for (elem of grades) elem.grade = null
+            data.push({
+                percentage: per_each_quiz[i],
+                total: tot_quiz[i],
+                index: i,
+                grades: grades
+            })
+        }
+        grades = [{ user: null, grade: null }]
+
+        itemArray.push({
+            item: 'Quiz',
+            percentage: per_quiz,
+            data: data
+        })
+
+        //Set the modifyby array, if is updating get from db and and the current user
+        //This action if call 'modifying', everytime this post is proceced we will register
         var modifiedby = []
 
         if (id == '') {
@@ -474,6 +556,7 @@ router.post('/setgrades', isLoggedIn, async function (req, res) {
 
     if (key.includes('final')) key = 'Final Exam'
     else if (key.includes('mt')) key = 'Midterm Exam'
+    else if (key.includes('quiz')) key = 'Quiz'
     else if (key.includes('hw')) key = 'Homework'
     else if (key.includes('la')) key = 'Learning Attitude'
     else if (key.includes('attendance')) key = 'Attendance'

@@ -19,9 +19,9 @@
     onmouseout="setClassroom(this)" class="btn btn-sm btn-outline-light">
     <i class="fas fa-chalkboard-teacher"></i> classroom
 </div>
-<a target="_blank" href="<%= subject.meeting %>" class="btn btn-sm btn-outline-light">
+<!-- <a target="_blank" href="<%= subject.meeting %>" class="btn btn-sm btn-outline-light">
     <i class="fas fa-video"></i> meeting
-</a>
+</a> -->
 <a href="/account/create-hw<%= subject.subject %>" class="btn btn-sm btn-outline-light">
     <i class="fas fa-pen"></i> new hw
 </a>
@@ -107,6 +107,44 @@
                                 </div>
                             </div>
                             <% } %>
+
+                                <!-- QUIZ -->
+                                <% if (subject.items[6].percentage !=null ) { %>
+                                    <div class="row">
+                                        <div class="form-group mt-4">
+                                            <div style="display: flex;">
+                                                <div class="text-primary">
+                                                    <%=subject.items[6].percentage%>%
+                                                </div>
+                                                &nbsp &nbsp
+                                                <legend> Quizzes </legend>
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-auto">
+                                            <% for(i in subject.items[6].data) { %>
+                                                <div class="col-lg-6">
+                                                    <input type="number" class="form-control" id="grade_quiz<%=i%>"
+                                                        name="grade_quiz<%=i%>"
+                                                        placeholder="__/<%= subject.items[6].data[i].total %> &nbsp Quiz<%= Number(i)+1 %>"
+                                                        value="<% for(x of subject.items[6].data[i].grades) { if(x.user == user.googleId) {%><%= x.grade %><% } } %>"
+                                                        onfocusout="validate(this, '<%= subject.items[6].data[i].total %>')">
+                                                    <div class="invalid-feedback"> must be between 0 and <%=
+                                                            subject.items[6].data[i].total %>
+                                                    </div>
+                                                    <small class="text-muted">
+                                                        <%= String(subject.items[6].data[i].percentage).slice(0, 4) %>%
+                                                    </small>
+                                                    <small id="per_quiz<%=i%>" hidden>
+                                                        <%= subject.items[6].data[i].percentage%>
+                                                    </small>
+                                                    <small id="tot_quiz<%=i%>" hidden>
+                                                        <%= subject.items[6].data[i].total %>
+                                                    </small>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
                     </div>
 
                     <div class="col-sm">
@@ -333,8 +371,9 @@
                             Number(document.getElementById('per_bonus').innerHTML)
                     }
 
-                    let i = 0
+                    let i
                     // ADD MIDTERM
+                    i = 0
                     while (document.getElementById(`per_mt${i}`) != null) {
                         totalgrade = totalgrade + (Number(document.getElementById(`grade_mt${i}`).value) /
                             document.getElementById(`tot_mt${i}`).innerHTML) *
@@ -342,8 +381,17 @@
                         i++
                     }
 
+                    // ADD QUIZZES
                     i = 0
+                    while (document.getElementById(`per_quiz${i}`) != null) {
+                        totalgrade = totalgrade + (Number(document.getElementById(`grade_quiz${i}`).value) /
+                            document.getElementById(`tot_quiz${i}`).innerHTML) *
+                            Number(document.getElementById(`per_quiz${i}`).innerHTML)
+                        i++
+                    }
+
                     // ADD HOMEWORK
+                    i = 0
                     while (document.getElementById(`per_hw${i}`) != null) {
                         totalgrade = totalgrade + (Number(document.getElementById(`grade_hw${i}`).value) /
                             document.getElementById(`tot_hw${i}`).innerHTML) *

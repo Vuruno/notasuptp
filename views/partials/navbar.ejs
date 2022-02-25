@@ -57,11 +57,30 @@
                         <li> <span class="dropdown-item disabled" href="/auth/google">
                                 <%= user.email %>
                             </span> </li>
+                        <div class="dropdown-divider"></div>
                         <li> <a id="login" class="dropdown-item" href="/auth/google"> Log in </a> </li>
                         <li> <a id="logout" class="dropdown-item" href="/auth/logout"> Log out </a> </li>
                         <li> <a id="deleteAuth" href="#" class="dropdown-item"
                                 onclick="deleteAccount('<%=user.email%>')">
                                 Delete account </a> </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="download"> Report
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="mailto:bruno.daniel.bordon.diaz.uptp@gmail.com?subject=Request improvement"
+                                id="download"> Request improvement to developer </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="mailto:bruno.daniel.bordon.diaz.uptp@gmail.com?subject=Report bugs"
+                                id="download"> Report bug to developer </a>
+                        </li>
+                        <div class="dropdown-divider"></div>
+                        <li> <span class="dropdown-item disabled"> webapp v 1.0.1 </span> </li>
                     </ul>
                 </li>
                 <% if (user.googleId=='113836366338657524799' ) { %>
@@ -71,9 +90,11 @@
                                 <li><a href="" class="dropdown-item" onclick="deleteSubject()"> Delete subject </a></li>
                                 <li><a href="" onclick="fetch('/showalluptpcalevents', {
                                     method: 'POST',
-                                }); alert('Watch the console')" class="dropdown-item"> Show all uptp_cal events </a></li>
+                                }); alert('Watch the console')" class="dropdown-item"> Show all uptp_cal events </a>
+                                </li>
                                 <li><a href="/calendarNewSubject" class="dropdown-item"> Calendar: New Subject </a></li>
-                                <li><a href="/calendarDeleteSubject" class="dropdown-item"> Calendar: Delete Subject </a></li>
+                                <li><a href="/calendarDeleteSubject" class="dropdown-item"> Calendar: Delete Subject
+                                    </a></li>
                             </ul>
                     </li>
                     <% } %>

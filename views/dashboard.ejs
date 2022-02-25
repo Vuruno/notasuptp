@@ -8,7 +8,7 @@
     </div>
     <% } %>
 
-        <h3 id="meetings"> Links of meetings (online classes)</h3>
+        <!-- <h3 id="meetings"> Links of meetings (online classes)</h3>
         <div class="row row-cols-auto">
             <% for( myClass of user.enrolled ) { %>
                 <div class="col">
@@ -25,7 +25,7 @@
 
         <br>
         <hr>
-        <br>
+        <br> -->
 
         <h3 id="classrooms"> Codes / Links of classrooms</h3>
         <div class="row row-cols-auto">
@@ -71,269 +71,240 @@
                             <div class="col-6 col-md-4 col-lg-2">
                                 <% var date=day[0].start.dateTime, AllDay=false; if(date==undefined) {
                                     date=day[0].start.date; AllDay=true} %>
-                                    <% if (new Date(day[0].start.dateTime).getDate()==today.getDate()) { %>
-                                        <div class="card border-primary mb-3">
-                                            <div class="card-header">
-                                                Today
-                                                <% } else { %>
-                                                    <div class="card bg-dark mb-3">
-                                                        <div class="card-header">
-                                                            <% if (AllDay) { %>
-                                                                <%= weekday[new Date(date).getUTCDay()] %>
-                                                                    <% } else { %>
-                                                                        <%= weekday[new Date(date).getDay()] %>
-                                                                            <% } %>
-                                                                                <% } %>
-                                                                                    <div class="text-muted">
-                                                                                        <% if (AllDay) { %>
-                                                                                            <%= new
-                                                                                                Date(date).getUTCDate()
-                                                                                                %>
-                                                                                                <% } else { %>
-                                                                                                    <%= new
-                                                                                                        Date(date).getDate()
-                                                                                                        %>
-                                                                                                        <% } %>
-                                                                                                            /
-                                                                                                            <%= new
-                                                                                                                Date(date).getMonth()
-                                                                                                                %>
-                                                                                                                /
-                                                                                                                <%= new
-                                                                                                                    Date(date).getFullYear()
-                                                                                                                    %>
-                                                                                    </div>
-                                                        </div>
-
-
-                                                        <div class="card-body py-0">
-                                                            <ul class="list-group list-group-flush">
-                                                                <% for (x of day) { %>
-                                                                    <li class="list-group-item bg-transparent px-0">
-                                                                        <div class="text-muted">
-                                                                            <% if (x.start.dateTime !=undefined ) { %>
-                                                                                <%= new
-                                                                                    Date(x.start.dateTime).getHours() %>
-                                                                                    :
-                                                                                    <% if (new
-                                                                                        Date(x.start.dateTime).getMinutes()
-                                                                                        < 10) {%>
-                                                                                        0<%= new
-                                                                                            Date(x.start.dateTime).getMinutes()
-                                                                                            %>
-                                                                                            <% } else {%>
-                                                                                                <%= new
-                                                                                                    Date(x.start.dateTime).getMinutes()
-                                                                                                    %>
-                                                                                                    <% } %>
-                                                                                                        -
-                                                                                                        <%= new
-                                                                                                            Date(x.end.dateTime).getHours()
-                                                                                                            %>:
-                                                                                                            <% if (new
-                                                                                                                Date(x.end.dateTime).getMinutes()
-                                                                                                                < 10)
-                                                                                                                {%>
-                                                                                                                0<%= new
-                                                                                                                    Date(x.end.dateTime).getMinutes()
-                                                                                                                    %>
-                                                                                                                    <% } else
-                                                                                                                        {%>
-                                                                                                                        <%= new
-                                                                                                                            Date(x.end.dateTime).getMinutes()
-                                                                                                                            %>
-                                                                                                                            <% }
-                                                                                                                                %>
-                                                                                                                                <% } else
-                                                                                                                                    {
-                                                                                                                                    %>
-                                                                                                                                    All
-                                                                                                                                    day
-                                                                                                                                    <% }
-                                                                                                                                        %>
-                                                                        </div>
-                                                                        <% let link='#schedule' ; for (subject of
-                                                                            allSubjects) {
-                                                                            if(x.summary.toLowerCase().includes(subject.subject.toLowerCase()))
-                                                                            { link=subject.meeting %>
-                                                                            <% } else if(x.description !=undefined) { if
-                                                                                (x.description.split('http')[1]
-                                                                                !=undefined) {}
-                                                                                link=`http${x.description.split('http')[1]}`
-                                                                                }}%>
-                                                                                <% if (link=='#schedule' ) { %>
-                                                                                    <%=x.summary%>
-                                                                                        <% } else {%>
-                                                                                            <a class="text-white"
-                                                                                                target="_blank"
-                                                                                                href="<%=link%>">
-                                                                                                <%=x.summary%>
-                                                                                            </a>
-                                                                                            <% } %>
-                                                                                                <br>
-                                                                    </li>
-                                                                    <% } %>
-
-                                                            </ul>
-                                                        </div>
-                                                        <div class="card-footer" id="hwday<%=daypostition%>">
-                                                            <%daypostition++%>
-                                                                Homeworks
-                                                                <% for (hw of allHw) { if(new Date(typeof
-                                                                    day[0].start.dateTime !='undefined' ?
-                                                                    day[0].start.dateTime : day[0].start.date).getDate()
-                                                                    + new Date(typeof day[0].start.dateTime
-                                                                    !='undefined' ? day[0].start.dateTime :
-                                                                    day[0].start.date).getMonth() * 30==new Date(typeof
-                                                                    hw.end.dateTime !='undefined' ? hw.end.dateTime :
-                                                                    hw.end.date).getDate() + new Date(typeof
-                                                                    hw.end.dateTime !='undefined' ? hw.end.dateTime :
-                                                                    hw.end.date).getMonth() * 30) { %>
-                                                                    <br>
-                                                                    <div class="d-inline text-muted">
-                                                                        <% if (hw.end.dateTime !=undefined) { %>
-                                                                            <%= new Date(hw.end.dateTime).getHours()%>:
-                                                                                <%= new
-                                                                                    Date(hw.end.dateTime).getMinutes()%>
-                                                                                    <% } else { %>
-                                                                                        23:59
-                                                                                        <% } %>
-
-                                                                    </div>
-                                                                    <div class="d-inline">
-                                                                        <% if(hw.description !=undefined &&
-                                                                            hw.description.split('http')[1] !=undefined)
-                                                                            { %>
-                                                                            <a class="text-white" target="_blank"
-                                                                                href="<%= 'http'+ hw.description.split('http')[1].split(' ')[0] %>">
-                                                                                <%=hw.summary.split(':')[0]%>
-                                                                            </a>
-                                                                            <% } else {%>
-                                                                                <%=hw.summary.split(':')[0]%>
-                                                                                    <% } %>
-                                                                    </div>
-                                                                    <% }} %>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            <% }} %>
-                                        </div>
-                            </div>
-
-                            <br>
-                            <hr>
-                            <br>
-
-                            <h3 id="hws">
-                                My homeworks
-                            </h3>
-                            <a class="btn btn-outline-warning" href="/account/create-hw">
-                                <i class="fas fa-plus-circle"></i> Add new homework
-                            </a>
-                            <a target="_black" class="btn btn-outline-success"
-                                href="https://calendar.google.com/calendar/u/0?cid=aWNlaGZtODJlbHJjMzFlNjEwcnQ3cTI1YnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ">
-                                Join to google calendar
-                            </a>
-                            <div class="row">
-                                <div class="col col-md-6">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover mt-3">
-                                            <tbody>
-                                                <% for (hw of allHw) { %>
-                                                    <% let end=new Date(hw.end.dateTime) %>
-                                                        <tr class="table-dark">
-                                                            <td style="width: 50%">
-                                                                <a href="/account/update-hw<%= hw.id %>"
-                                                                    class="py-0 btn btn-sm btn-outline-light">
-                                                                    <i class="far fa-edit"></i>
-                                                                </a>
-                                                                <% if(hw.description !=undefined &&
-                                                                    hw.description.split('http')[1] !=undefined) { %>
-                                                                    <a target="_blank" class="text-white"
-                                                                        href="<%= 'http'+ hw.description.split('http')[1].split(' ')[0] %>">
-                                                                        <%=hw.summary.split(':')[0].toUpperCase()%>
-                                                                    </a>
-                                                                    <% } else { %>
-                                                                        <div class="text-white">
-                                                                            <%=hw.summary.split(':')[0].toUpperCase()%>
-                                                                                <% } %>
-                                                                        </div>
-
-                                                                        <div class="text-muted">
-                                                                            <% if (!isNaN(end.getDate())) { %>
-                                                                                <% var minutes=end.getMinutes(); if
-                                                                                    (Number(end.getMinutes()) < 10)
-                                                                                    {minutes=`0${end.getMinutes()}`}%>
-                                                                                    <%=weekday[end.getDay()]%>
-                                                                                        <%=end.getDate()%> /
-                                                                                            <%=end.getMonth()%>
-                                                                                                &nbsp
-                                                                                                <%=end.getHours()%>
-                                                                                                    :
-                                                                                                    <%=minutes%>
-                                                                                                        <% } else { %>
-                                                                                                            <% end=new
-                                                                                                                Date(hw.end.date)
-                                                                                                                %>
-                                                                                                                <%=end.getDate()%>
-                                                                                                                    /
-                                                                                                                    <%=end.getMonth()%>
-                                                                                                                        /
-                                                                                                                        <%=end.getFullYear()%>
-                                                                                                                            &nbsp
-                                                                                                                            23:59
-                                                                                                                            <% }
-                                                                                                                                %>
-                                                                        </div>
-                                                            </td>
-                                                            <% if(hw.description !=undefined) { %>
-                                                                <td>
-                                                                    <b>
-                                                                        <% let title=hw.summary.split(':'); for (i in
-                                                                            title) { if ( i !=0) { %>
-                                                                            <%= title[i] %>
-                                                                                <% }} %>
-                                                                    </b>
-                                                                    <br>
-                                                                    <% for (x in hw.description.split('http')) { if (x
-                                                                        !=1) {%>
-                                                                        <%= hw.description.split('http')[x] %>
-                                                                            <% }} %>
-                                                                </td>
+                                    <div class="card bg-dark mb-3">
+                                        <div class="card-header">
+                                            <% if (new Date(day[0].start.dateTime).getDate()==today.getDate()) { %>
+                                                <div class="text-primary d-inline">
+                                                    <b> TODAY </b> </div>
+                                                <% } if (AllDay) { %>
+                                                    <%= weekday[new Date(date).getUTCDay()] %>
+                                                        <% } else { %>
+                                                            <%= weekday[new Date(date).getDay()] %>
                                                                 <% } %>
-                                                        </tr>
-                                                        <%}%>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <hr>
-                            <br>
-                            <h3 id="calendar">
-                                Academic anual calendar
-                            </h3>
-                            <a target="_black" class="btn btn-outline-warning"
-                                href="https://drive.google.com/file/d/1mxRZEOKx8ncabOxEsX6PeXW3nNYBTC-i/view?usp=sharing">
-                                View / Download
-                            </a>
-                            <a target="_black" class="btn btn-outline-success"
-                                href="https://calendar.google.com/calendar/u/0?cid=cG5zMDNodm1jOHZqYXI2NTI1ZzM4aDMyamtAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ">
-                                Join to google calendar
-                            </a>
-                            <h1>
-                                <br>
-                            </h1>
-                            <script src="./notifySub.js"></script>
+                                                                    <div class="text-muted">
+                                                                        <% if (AllDay) { %>
+                                                                            <%= new Date(date).getUTCDate() %>
+                                                                                <% } else { %>
+                                                                                    <%= new Date(date).getDate() %>
+                                                                                        <% } %>
+                                                                                            /
+                                                                                            <%= new
+                                                                                                Date(date).getMonth() %>
+                                                                                                /
+                                                                                                <%= new
+                                                                                                    Date(date).getFullYear()
+                                                                                                    %>
+                                                                    </div>
+                                        </div>
 
-                            <script>
-                                for (i = 0; i < 8; i++) {
-                                    let element = document.getElementById(`hwday${i}`)
-                                    if (element != null) {
-                                        if (element.innerText == 'Homeworks') {
-                                            element.hidden = true
-                                        }
-                                    }
-                                }
-                            </script>
+
+                                        <div class="card-body py-0">
+                                            <ul class="list-group list-group-flush">
+                                                <% for (x of day) { %>
+                                                    <li class="list-group-item bg-transparent px-0">
+                                                        <div class="text-muted">
+                                                            <% if (x.start.dateTime !=undefined ) { %>
+                                                                <%= new Date(x.start.dateTime).getHours() %>
+                                                                    :
+                                                                    <% if (new Date(x.start.dateTime).getMinutes() < 10)
+                                                                        {%>
+                                                                        0<%= new Date(x.start.dateTime).getMinutes() %>
+                                                                            <% } else {%>
+                                                                                <%= new
+                                                                                    Date(x.start.dateTime).getMinutes()
+                                                                                    %>
+                                                                                    <% } %>
+                                                                                        -
+                                                                                        <%= new
+                                                                                            Date(x.end.dateTime).getHours()
+                                                                                            %>:
+                                                                                            <% if (new
+                                                                                                Date(x.end.dateTime).getMinutes()
+                                                                                                < 10) {%>
+                                                                                                0<%= new
+                                                                                                    Date(x.end.dateTime).getMinutes()
+                                                                                                    %>
+                                                                                                    <% } else {%>
+                                                                                                        <%= new
+                                                                                                            Date(x.end.dateTime).getMinutes()
+                                                                                                            %>
+                                                                                                            <% } %>
+                                                                                                                <% } else
+                                                                                                                    { %>
+                                                                                                                    All
+                                                                                                                    day
+                                                                                                                    <% }
+                                                                                                                        %>
+                                                        </div>
+                                                        <% let link='#schedule' ; for (subject of allSubjects) {
+                                                            if(x.summary.toLowerCase().includes(subject.subject.toLowerCase()))
+                                                            { link=subject.meeting %>
+                                                            <% } else if(x.description !=undefined) { if
+                                                                (x.description.split('http')[1] !=undefined) {}
+                                                                link=`http${x.description.split('http')[1]}` }}%>
+                                                                <% if (link=='#schedule' ) { %>
+                                                                    <%=x.summary%>
+                                                                        <% } else {%>
+                                                                            <a class="text-white" target="_blank"
+                                                                                href="<%=link%>">
+                                                                                <%=x.summary%>
+                                                                            </a>
+                                                                            <% } %>
+                                                                                <br>
+                                                    </li>
+                                                    <% } %>
+
+                                            </ul>
+                                        </div>
+                                        <div class="card-footer" id="hwday<%=daypostition%>">
+                                            <%daypostition++%>
+                                                Homeworks
+                                                <% for (hw of allHw) { if(new Date(typeof day[0].start.dateTime
+                                                    !='undefined' ? day[0].start.dateTime : day[0].start.date).getDate()
+                                                    + new Date(typeof day[0].start.dateTime !='undefined' ?
+                                                    day[0].start.dateTime : day[0].start.date).getMonth() * 30==new
+                                                    Date(typeof hw.end.dateTime !='undefined' ? hw.end.dateTime :
+                                                    hw.end.date).getDate() + new Date(typeof hw.end.dateTime
+                                                    !='undefined' ? hw.end.dateTime : hw.end.date).getMonth() * 30) { %>
+                                                    <br>
+                                                    <div class="d-inline text-muted">
+                                                        <% if (hw.end.dateTime !=undefined) { %>
+                                                            <%= new Date(hw.end.dateTime).getHours()%>:
+                                                                <%= new Date(hw.end.dateTime).getMinutes()%>
+                                                                    <% } else { %>
+                                                                        23:59
+                                                                        <% } %>
+
+                                                    </div>
+                                                    <div class="d-inline">
+                                                        <% if(hw.description !=undefined &&
+                                                            hw.description.split('http')[1] !=undefined) { %>
+                                                            <a class="text-white" target="_blank"
+                                                                href="<%= 'http'+ hw.description.split('http')[1].split(' ')[0] %>">
+                                                                <%=hw.summary.split(':')[0]%>
+                                                            </a>
+                                                            <% } else {%>
+                                                                <%=hw.summary.split(':')[0]%>
+                                                                    <% } %>
+                                                    </div>
+                                                    <% }} %>
+                                        </div>
+                                    </div>
+                            </div>
+                            <% }} %>
+                    </div>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
+        <h3 id="hws">
+            My homeworks
+        </h3>
+        <a class="btn btn-outline-warning" href="/account/create-hw">
+            <i class="fas fa-plus-circle"></i> Add new homework
+        </a>
+        <a target="_black" class="btn btn-outline-success"
+            href="https://calendar.google.com/calendar/u/0?cid=aWNlaGZtODJlbHJjMzFlNjEwcnQ3cTI1YnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ">
+            Join to google calendar
+        </a>
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-hover mt-3">
+                        <tbody>
+                            <% for (hw of allHw) { %>
+                                <% let end=new Date(hw.end.dateTime) %>
+                                    <tr class="table-dark">
+                                        <td style="width: 50%">
+                                            <a href="/account/update-hw<%= hw.id %>"
+                                                class="py-0 btn btn-sm btn-outline-light">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                            <% if(hw.description !=undefined && hw.description.split('http')[1]
+                                                !=undefined) { %>
+                                                <a target="_blank" class="text-white"
+                                                    href="<%= 'http'+ hw.description.split('http')[1].split(' ')[0] %>">
+                                                    <%=hw.summary.split(':')[0].toUpperCase()%>
+                                                </a>
+                                                <% } else { %>
+                                                    <div class="text-white">
+                                                        <%=hw.summary.split(':')[0].toUpperCase()%>
+                                                            <% } %>
+                                                    </div>
+
+                                                    <div class="text-muted">
+                                                        <% if (!isNaN(end.getDate())) { %>
+                                                            <% var minutes=end.getMinutes(); if
+                                                                (Number(end.getMinutes()) < 10)
+                                                                {minutes=`0${end.getMinutes()}`}%>
+                                                                <%=weekday[end.getDay()]%>
+                                                                    <%=end.getDate()%> /
+                                                                        <%=end.getMonth()%>
+                                                                            &nbsp
+                                                                            <%=end.getHours()%>
+                                                                                :
+                                                                                <%=minutes%>
+                                                                                    <% } else { %>
+                                                                                        <% end=new Date(hw.end.date) %>
+                                                                                            <%=end.getDate()%>
+                                                                                                /
+                                                                                                <%=end.getMonth()%>
+                                                                                                    /
+                                                                                                    <%=end.getFullYear()%>
+                                                                                                        &nbsp
+                                                                                                        23:59
+                                                                                                        <% } %>
+                                                    </div>
+                                        </td>
+                                        <% if(hw.description !=undefined) { %>
+                                            <td>
+                                                <b>
+                                                    <% let title=hw.summary.split(':'); for (i in title) { if ( i !=0) {
+                                                        %>
+                                                        <%= title[i] %>
+                                                            <% }} %>
+                                                </b>
+                                                <br>
+                                                <% for (x in hw.description.split('http')) { if (x !=1) {%>
+                                                    <%= hw.description.split('http')[x] %>
+                                                        <% }} %>
+                                            </td>
+                                            <% } %>
+                                    </tr>
+                                    <%}%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <h3 id="calendar">
+            Academic anual calendar
+        </h3>
+        <a target="_black" class="btn btn-outline-warning"
+            href="https://drive.google.com/file/d/1mxRZEOKx8ncabOxEsX6PeXW3nNYBTC-i/view?usp=sharing">
+            View / Download
+        </a>
+        <a target="_black" class="btn btn-outline-success"
+            href="https://calendar.google.com/calendar/u/0?cid=cG5zMDNodm1jOHZqYXI2NTI1ZzM4aDMyamtAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ">
+            Join to google calendar
+        </a>
+        <h1>
+            <br>
+        </h1>
+        <script src="./notifySub.js"></script>
+
+        <script>
+            for (i = 0; i < 8; i++) {
+                let element = document.getElementById(`hwday${i}`)
+                if (element != null) {
+                    if (element.innerText == 'Homeworks') {
+                        element.hidden = true
+                    }
+                }
+            }
+        </script>

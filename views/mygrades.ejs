@@ -5,7 +5,7 @@
                 Grades
         </h1>
     </div>
-    <div class="col-lg-8 table-responsive-md text-center" id="grades">
+    <div class="col-md-10 table-responsive-md text-center" id="grades">
         <table class="table table-striped text-nowrap">
             <thead>
                 <tr>
@@ -16,6 +16,7 @@
                     <th> LA </th>
                     <th> ATT </th>
                     <th> +BON </th>
+                    <th> QUIZ </th>
                     <th> Grade </th>
                     <th> Int. </th>
                     <th> Mec </th>
@@ -89,13 +90,7 @@
                         </tr>
                         <% } %>
                             <tr>
-                                <th> Average </th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th colspan="8" class="text-start"> Average </th>
                                 <th>
                                     <%= (arrGrades.reduce((a, b)=> a + b) / arrGrades.length).toFixed(2) %>
                                 </th>
