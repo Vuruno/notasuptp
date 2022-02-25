@@ -155,13 +155,17 @@ router.get('/update-hw:id', isLoggedIn, async function (req, res) {
         let endhours = end.getHours()
         if (Number(endminutes) < 10) endminutes = `0${endminutes}`
         if (Number(endhours) < 10) endhours = `0${endhours}`
+        let link = `http${desc[desc.length - 1]}`
+        let description = String(desc.slice(0, desc.length - 1)).trim()
+        if (desc.length == 1) {
+            link = ''
+            description = desc[0].trim()
+        }
 
         var subject = hw.data.summary.split(':')[0].trim(),
             title = hw.data.summary.split(':')[1].trim(),
             date = `${hw.data.end.dateTime.split('T')[0]}`,
-            time = `${endhours}:${endminutes}`,
-            description = desc.slice(0, desc.length - 1),
-            link = `http${desc[desc.length - 1]}`
+            time = `${endhours}:${endminutes}`
         if (link.trim() == 'http') link = ''
 
         res.render('newhw', { user: req.user, id, subject, title, date, time, description, link })
