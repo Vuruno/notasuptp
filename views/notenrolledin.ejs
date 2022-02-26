@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row mt-5">
+        <hr>
+        <h1 class="page-header">
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+            You are not enrolled into <%= subject.subject %>
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+        </h1>
+        <div class="mb-3"> <a class="text-primary text-decoration-underline" onclick="enroll('<%= subject._id %>')"> Enroll in </a> </div>
+        <hr>
+    </div>
+</div>
+
+<script>
+    async function enroll(id) {
+        await fetch("/account/addsubject", {
+            method: "POST",
+            body: JSON.stringify({ idadd: id }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        location.href = `/account/course${id}`
+    }
+</script>

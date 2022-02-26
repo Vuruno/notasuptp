@@ -43,7 +43,7 @@ app.use('/account', require('./routes/account.js'))
 // 	res.status(404).redirect('/');
 // });
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '/public')))
 
 global.pushSubscripton
 require('./settings/sendNotification.js')

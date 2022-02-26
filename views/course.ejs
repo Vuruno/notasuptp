@@ -25,7 +25,9 @@
 <a href="/account/create-hw<%= subject.subject %>" class="btn btn-sm btn-outline-light">
     <i class="fas fa-pen"></i> new hw
 </a>
-
+<div onclick="unroll('<%=subject._id%>')" class="btn btn-sm btn-outline-light">
+    <i class="fas fa-minus-circle"></i> unroll
+</div>
 <% if (user.name.givenName=='UPTP' ) { %>
     <div class="alert alert-dark alert-dismissible fade show mt-3" role="alert">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -467,4 +469,18 @@
                 function setSite(that, text) { that.innerHTML = '<i class="fas fa-link"></i> site' }
                 function setClassroom(that, text) { that.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> classroom' }
                 function setMeeting(that, text) { that.innerHTML = '<i class="fas fa-video"></i> meeting' }
+
+                async function unroll(id) {
+                    if (confirm('Unroll from this class? \n This will not delete your data') == true) {
+                        await fetch("/account/removesubject", {
+                            method: "POST",
+                            body: JSON.stringify({idremove: id}),
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                        });
+                        location.href = `/account/`
+                    }
+                }
             </script>

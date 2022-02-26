@@ -50,19 +50,29 @@ router.get('/coursenoexists', async function (req, res) {
     res.render('coursenoexists', { user: req.user || empyUser })
 })
 
-router.get('/course:subjectid', async function (req, res) {
+router.get('/notenrolledin:subjectid', isLoggedIn, async function (req, res) {
     let subjectId = req.params.subjectid
     let subject = await Subject.findOne({ _id: subjectId })
-    //verify if subject exists and user is enrolled in
-    if (subject == null) {
-        res.redirect('/account/coursenoexists')
-    } else if (req.user == undefined) {
-        res.render('course', { user: empyUser, subject: subject })
-    } else if (req.user.enrolled.map(function (e) { return e.id; }).indexOf(String(subject._id)) > -1) {
-        let allHw = await allHW(req.user || empyUser)
-        res.render('course', { user: req.user || empyUser, subject: subject, allHw: allHw })
-    } else {
-        res.redirect('/account/coursenoexists')
+    res.render('notenrolledin', { user: req.user || empyUser, subject: subject })
+})
+
+router.get('/course:subjectid', async function (req, res) {
+    try {
+        let subjectId = req.params.subjectid
+        let subject = await Subject.findOne({ _id: subjectId })
+        //verify if subject exists and user is enrolled in
+        if (subject == null) {
+            res.redirect('/account/coursenoexists')
+        } else if (req.user == undefined) {
+            res.render('course', { user: empyUser, subject: subject })
+        } else if (req.user.enrolled.map(function (e) { return e.id; }).indexOf(String(subject._id)) > -1) {
+            let allHw = await allHW(req.user || empyUser)
+            res.render('course', { user: req.user || empyUser, subject: subject, allHw: allHw })
+        } else {
+            res.redirect(`/account/notenrolledin${subjectId}`)
+        }
+    } catch (e) {
+        res.redirect('/')
     }
 })
 
@@ -190,7 +200,7 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
         per_hw, tot_hw, per_each_hw,
         per_la, tot_la,
         per_attendance, tot_attendance,
-        per_bonus,tot_bonus,
+        per_bonus, tot_bonus,
         meeting, classroom } = req.body
 
     semester = Number(semester)
@@ -640,7 +650,7 @@ router.post('/addsubject', isLoggedIn, async function (req, res) {
     res.redirect('/account/courses')
 })
 
-router.post('/removesubject', isLoggedIn, async function (req, res) {
+router.post('/removesubject', isLoggedIn, async function (req, res, next) {
     var { idremove } = req.body
     var subjectRemove = await Subject.findOne({ _id: idremove })
 

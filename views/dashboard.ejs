@@ -27,22 +27,6 @@
         <hr>
         <br> -->
 
-        <h3 id="classrooms"> Codes / Links of classrooms</h3>
-        <div class="row row-cols-auto">
-            <% for( myClass of user.enrolled ) { %>
-                <div class="col">
-                    <%= myClass.subject %>:
-                        <% for (x of allSubjects) { if(x._id==myClass.id) { %>
-                            <%= x.classroom %>
-                                <% } } %>
-                </div>
-                <% } %>
-        </div>
-
-        <br>
-        <hr>
-        <br>
-
         <h3 id="schedule">
             Schedule</h3>
         <a target="_blank" class="btn btn-outline-warning"
@@ -75,7 +59,8 @@
                                         <div class="card-header">
                                             <% if (new Date(day[0].start.dateTime).getDate()==today.getDate()) { %>
                                                 <div class="text-warning d-inline">
-                                                    <b> TODAY </b> </div>
+                                                    <b> TODAY </b>
+                                                </div>
                                                 <% } if (AllDay) { %>
                                                     <%= weekday[new Date(date).getUTCDay()] %>
                                                         <% } else { %>
@@ -279,9 +264,27 @@
                 </div>
             </div>
         </div>
+
         <br>
         <hr>
         <br>
+
+        <h3 id="classrooms"> Codes / Links of classrooms</h3>
+        <div class="row row-cols-auto">
+            <% for( myClass of user.enrolled ) { %>
+                <div class="col">
+                    <%= myClass.subject %>:
+                        <% for (x of allSubjects) { if(x._id==myClass.id) { %>
+                            <%= x.classroom %>
+                                <% } } %>
+                </div>
+                <% } %>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
         <h3 id="calendar">
             Academic anual calendar
         </h3>
