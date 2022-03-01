@@ -1,6 +1,6 @@
 {
   "name": "gradesuptp",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "bootswatch": "^5.1.3",
+    "cookie-session": "^2.0.0",
     "dateparse": "^0.0.1",
     "dotenv": "^14.2.0",
     "ejs": "^3.1.6",

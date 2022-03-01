@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const router = express.Router();
 const passport = require('passport');
 const { isLoggedIn } = require('../settings/isAuth');
