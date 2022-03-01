@@ -57,7 +57,7 @@
                                     date=day[0].start.date; AllDay=true} %>
                                     <div class="card bg-dark mb-3">
                                         <div class="card-header">
-                                            <% if (new Date(day[0].start.dateTime).getDate()==today.getDate()) { %>
+                                            <% if (new Date(day[0].start.dateTime).getDate()==today.getDate() || new Date(day[0].start.date).getUTCDate()==today.getDate()) { %>
                                                 <div class="text-warning d-inline">
                                                     <b> TODAY </b>
                                                 </div>
@@ -89,28 +89,21 @@
                                                     <li class="list-group-item bg-transparent px-0">
                                                         <div class="text-muted">
                                                             <% if (x.start.dateTime !=undefined ) { %>
-                                                                <%= new Date(x.start.dateTime).getHours() %>
-                                                                    :
-                                                                    <% if (new Date(x.start.dateTime).getMinutes() < 10)
-                                                                        {%>
-                                                                        0<%= new Date(x.start.dateTime).getMinutes() %>
+                                                                <% if (new Date(x.start.dateTime).getMinutes() < 10) {%>
+                                                                <%= new Date(x.start.dateTime).getHours() %>:0<%= new Date(x.start.dateTime).getMinutes() %>
                                                                             <% } else {%>
-                                                                                <%= new
-                                                                                    Date(x.start.dateTime).getMinutes()
+                                                                                <%= new Date(x.start.dateTime).getHours() %>:<%= newDate(x.start.dateTime).getMinutes()
                                                                                     %>
                                                                                     <% } %>
                                                                                         -
-                                                                                        <%= new
-                                                                                            Date(x.end.dateTime).getHours()
-                                                                                            %>:
                                                                                             <% if (new
                                                                                                 Date(x.end.dateTime).getMinutes()
                                                                                                 < 10) {%>
-                                                                                                0<%= new
+                                                                                                    <%= new Date(x.end.dateTime).getHours() %>:0<%= new
                                                                                                     Date(x.end.dateTime).getMinutes()
                                                                                                     %>
                                                                                                     <% } else {%>
-                                                                                                        <%= new
+                                                                                                        <%= new Date(x.end.dateTime).getHours() %>:<%= new
                                                                                                             Date(x.end.dateTime).getMinutes()
                                                                                                             %>
                                                                                                             <% } %>

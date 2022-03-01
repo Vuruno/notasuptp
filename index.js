@@ -16,7 +16,7 @@ mongoose.connect(
   .catch(err => console.log(err));
 app.use(express.json({ limit: '1mb' }))
 // settings
-const port = 3000
+const port = process.env.PORT
 app.use(expressLayouts);
 app.use(express.urlencoded({ extended: false }))
 app.set('views', path.join(__dirname, 'views'))
