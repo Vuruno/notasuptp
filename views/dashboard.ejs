@@ -38,13 +38,13 @@
             Join to g_calendar
         </a>
         <a target="_blank" class="btn btn-outline-warning" href="https://drive.google.com/file/d/1KwRfu9Z4oLfErWcNbNip3gMEbYHeNGoa/view?usp=sharing">
-            Classes (.png)
+            Classes.jpg
         </a>
         <a target="_blank" class="btn btn-outline-warning" href="#" hidden>
-            Midterm (.png)
+            Midterm.jpg
         </a>
         <a target="_blank" class="btn btn-outline-warning" href="#" hidden>
-            Final (.png)
+            Final.jpg
         </a>
         <div class="row">
             <% var today=new Date(); daypostition=0 %>
@@ -52,7 +52,7 @@
                     %>
                     <div style="overflow-x: auto" class="mt-3 row flex-row flex-nowrap">
                         <% for (day of weekSchedule) { if(day[0] !=undefined) { %>
-                            <div class="col-5 col-md-4 col-lg-2">
+                            <div class="col-7 col-md-5 col-lg-3">
                                 <% var date=day[0].start.dateTime, AllDay=false; if(date==undefined) {
                                     date=day[0].start.date; AllDay=true} %>
                                     <div class="card bg-dark mb-3">
@@ -86,13 +86,13 @@
                                         <div class="card-body py-0">
                                             <ul class="list-group list-group-flush">
                                                 <% for (x of day) { %>
-                                                    <li class="list-group-item bg-transparent px-0">
+                                                    <li class="list-group-item bg-transparent px-0 py-1">
                                                         <div class="text-muted">
                                                             <% if (x.start.dateTime !=undefined ) { %>
                                                                 <% if (new Date(x.start.dateTime).getMinutes() < 10) {%>
                                                                 <%= new Date(x.start.dateTime).getHours() %>:0<%= new Date(x.start.dateTime).getMinutes() %>
                                                                             <% } else {%>
-                                                                                <%= new Date(x.start.dateTime).getHours() %>:<%= newDate(x.start.dateTime).getMinutes()
+                                                                                <%= new Date(x.start.dateTime).getHours() %>:<%= new Date(x.start.dateTime).getMinutes()
                                                                                     %>
                                                                                     <% } %>
                                                                                         -

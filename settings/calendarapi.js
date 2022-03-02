@@ -295,7 +295,7 @@ async function newSubject(body) {
                 start: startTime,
                 end: endTime,
                 description: description,
-                summary: subject
+                summary: subject.trim()
             }
         })
     }
@@ -312,7 +312,7 @@ async function deleteSubject(body) {
         timeMax: to
     })
     for (elem of allEvents.data.items) {
-        if (elem.summary == subject) {
+        if (elem.summary.trim() == subject.trim()) {
             try {
                 await calendar.events.delete({
                     calendarId: uptp_cal,

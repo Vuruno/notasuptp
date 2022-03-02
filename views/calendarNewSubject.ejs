@@ -7,7 +7,8 @@ Name must be exactly the same for a lot of functionalities (also the uppercase) 
                 <label for="subject"> Subject: </label>
                 <input type="text" id="subject" name="subject" required> <br>
                 <label for="day"> Day: </label>
-                <select name="day" id="day">
+                <select name="day" id="day" required>
+                    <option disabled selected value> -- select -- </option>
                     <option value="0"> Sunday </option>
                     <option value="1"> Monday </option>
                     <option value="2"> Tuesday </option>
