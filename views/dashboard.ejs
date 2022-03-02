@@ -114,12 +114,17 @@
                                                                                                                     <% }
                                                                                                                         %>
                                                         </div>
-                                                        <% let link='#schedule' ; for (subject of allSubjects) {
-                                                            if(x.summary.toLowerCase().includes(subject.subject.toLowerCase()))
-                                                            { link=subject.meeting %>
-                                                            <% } else if(x.description !=undefined) { if
-                                                                (x.description.split('http')[1] !=undefined) {}
-                                                                link=`http${x.description.split('http')[1]}` }}%>
+                                                        <% let link='#schedule' ;
+                                                        for (subject of allSubjects) {
+                                                            if(x.summary.toLowerCase().includes(subject.subject.toLowerCase())) {
+                                                                link=subject.meeting
+                                                            } 
+                                                        }
+                                                        if(x.description !=undefined && link == '#schedule') {
+                                                            if (x.description.split('http')[1] !=undefined) {
+                                                                link=`http${x.description.split('http')[1]}`
+                                                            }
+                                                        } %>
                                                                 <% if (link=='#schedule' ) { %>
                                                                     <%=x.summary%>
                                                                         <% } else {%>
