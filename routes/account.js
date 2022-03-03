@@ -537,25 +537,31 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
             // Change name of the subject
             if (subject != tempSubject.subject) {
                 //Update name of subjects in User
-                await User.updateMany({ $in: { enrolled: { id: id } } }, {
-                    enrolled: { id: id, subject: subject },
+                await User.updateMany({
+                    $in: { enrolled: { id: id } }
+                }, {
+                    $set: { "enrolled.$[elem].subject": subject },
+                }, {
+                    arrayFilters: [
+                        { "elem.id": id }
+                    ]
                 })
 
-                for (i of req.user.enrolled) {
-                    if (i.id == id) {
-                        i.id = id
-                        i.subject = subject
-                    }
+            for (i of req.user.enrolled) {
+                if (i.id == id) {
+                    i.id = id
+                    i.subject = subject
                 }
-
-                //pdate name of subjects into calendars
-                await updateSubjectName(tempSubject.subject, subject)
             }
-        }
 
-        if (id == '') res.redirect('/account/courses')
-        else res.redirect(`/account/course${id}`)
+            //pdate name of subjects into calendars
+            await updateSubjectName(tempSubject.subject, subject)
+        }
     }
+
+    if (id == '') res.redirect('/account/courses')
+    else res.redirect(`/account/course${id}`)
+}
 
 })
 

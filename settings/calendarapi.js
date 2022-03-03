@@ -200,10 +200,8 @@ async function updateSubjectName(prevsubject, subject) {
         timeMax: max,
         maxResults: 1000
     })
-    console.log(uptpEvents.data.items.length)
     
     for (evt of uptpEvents.data.items) {
-        console.log(evt.summary)
         if (evt.summary == prevsubject) {
             await calendar.events.update({
                 calendarId: uptp_cal,
