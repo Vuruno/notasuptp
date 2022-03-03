@@ -534,7 +534,6 @@ router.post('/updatesubject', isLoggedIn, async function (req, res) {
             await saveSubject.save()
         } else {
             await Subject.findOneAndReplace({ '_id': id }, updatesubject)
-
             // Change name of the subject
             if (subject != tempSubject.subject) {
                 //Update name of subjects in User

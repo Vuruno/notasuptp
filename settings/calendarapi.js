@@ -190,19 +190,20 @@ async function getHW(id) {
 async function updateSubjectName(prevsubject, subject) {
     let min = new Date()
     let max = new Date()
-    min.setDate(1)
-    min.setMonth(1)
-    max.setDate(31)
-    max.setMonth(12)
+    min.setUTCDate(min.getUTCDate()-7)
+    max.setUTCMonth(max.getUTCMonth() + 5)
 
     //Update the UPTP events
     var uptpEvents = await calendar.events.list({
         calendarId: uptp_cal,
         timeMin: min,
-        timeMax: max
+        timeMax: max,
+        maxResults: 1000
     })
-
+    console.log(uptpEvents.data.items.length)
+    
     for (evt of uptpEvents.data.items) {
+        console.log(evt.summary)
         if (evt.summary == prevsubject) {
             await calendar.events.update({
                 calendarId: uptp_cal,
