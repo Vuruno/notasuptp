@@ -4,3 +4,6 @@ Error: Events in uptp_cal did not updated. Cause: calendar api shoud have a high
 v 1.0.10
 Improvement: Show meeting link in subject page
 Error: Somehow the classes disappears or duplicates. Cause: When changing subject name, the enrolled where replaced with just the updated subject, instead of just updating the updated one.
+
+v 1.0.11
+Improvement: Auto-scroll to 'today' in dashboard

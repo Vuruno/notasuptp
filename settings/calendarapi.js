@@ -33,7 +33,7 @@ function url(description) {
     try {
         url = new URL(description);
     } catch (_) {
-        return '#schedule';
+        return '#today';
     }
     return url
 }
