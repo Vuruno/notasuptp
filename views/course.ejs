@@ -25,8 +25,8 @@
 <a href="/account/create-hw<%= subject.subject %>" class="btn btn-sm btn-outline-light">
     <i class="fas fa-pen"></i> new hw
 </a>
-<div onclick="unroll('<%=subject._id%>')" class="btn btn-sm btn-outline-light">
-    <i class="fas fa-minus-circle"></i> unroll
+<div onclick="unenroll('<%=subject._id%>')" class="btn btn-sm btn-outline-light">
+    <i class="fas fa-minus-circle"></i> unenroll
 </div>
 <% if (user.name.givenName=='UPTP' ) { %>
     <div class="alert alert-dark alert-dismissible fade show mt-3" role="alert">
@@ -38,7 +38,7 @@
         <div style="overflow-x: auto" class="mt-3 row flex-row flex-nowrap">
             <% for (hw of allHw) { %>
                 <% if( hw.summary.split(':')[0].trim()==subject.subject) { %>
-                    <div class="col-6 col-md-4 col-lg-2">
+                    <div class="col-6 col-md-4 col-lg-3">
                         <div class="card bg-dark">
                             <div class="card-body">
                                 <a href="/account/update-hw<%= hw.id %>" class="py-0 btn btn-sm btn-outline-light">
@@ -55,7 +55,7 @@
 
                                                 <div class="text-muted">
                                                     <%let end=new Date(hw.end.dateTime)%>
-                                                        <%=end.getDate()%>/<%=end.getMonth()%>/<%=end.getFullYear()%>
+                                                        <%=end.getDate()%>/<%=end.getMonth()+1%>/<%=end.getFullYear()%>
                                                                     &nbsp
                                                                     <%=end.getHours()%>:<%=end.getMinutes()%>
                                                 </div>
@@ -470,8 +470,8 @@
                 function setClassroom(that, text) { that.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> classroom' }
                 function setMeeting(that, text) { that.innerHTML = '<i class="fas fa-video"></i> meeting' }
 
-                async function unroll(id) {
-                    if (confirm('Unroll from this class? \n This will not delete your data') == true) {
+                async function unenroll(id) {
+                    if (confirm('Unenroll from this class? \n This will not delete your data') == true) {
                         await fetch("/account/removesubject", {
                             method: "POST",
                             body: JSON.stringify({idremove: id}),

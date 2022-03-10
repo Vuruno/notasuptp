@@ -7,3 +7,9 @@ Error: Somehow the classes disappears or duplicates. Cause: When changing subjec
 
 v 1.0.11
 Improvement: Auto-scroll to 'today' in dashboard
+
+v 1.0.12
+Error: ~Unrroll~ to Unenroll
+Error: Month in hw is wrong (calendar uses index)
+Improvement: At click in class name in schedule, open the class, not the meeting
+Impovement: In the he, put the desciption in another col
