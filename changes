@@ -13,3 +13,7 @@ Error: ~Unrroll~ to Unenroll
 Error: Month in hw is wrong (calendar uses index)
 Improvement: At click in class name in schedule, open the class, not the meeting
 Impovement: In the he, put the desciption in another col
+
+v 1.0.13
+Error: HW are not in order
+Error: session doesn't work. Cause: wrarp error

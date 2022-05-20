@@ -101,7 +101,9 @@ async function allHW(user) {
     events = await calendar.events.list({
         calendarId: hw_cal,
         timeMin: timeMin,
-        timeMax: timeMax
+        timeMax: timeMax,
+        orderBy: 'startTime',
+        singleEvents: true,
     })
 
     //Just return my subjects hw
