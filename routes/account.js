@@ -23,8 +23,10 @@ router.get('/', isLoggedIn, async function (req, res) {
 })
 
 router.get('/mygrades', isLoggedIn, async function (req, res) {
+    allSubjects= await Subject.find({enrolled: req.user.googleId})
+
     if (req.user.enrolled.length < 1) res.redirect('/account/courses')
-    else res.render('mygrades', { user: req.user || empyUser, allSubjects: await Subject.find() })
+    else res.render('mygrades', { user: req.user || empyUser, allSubjects: allSubjects })
 })
 
 router.get('/grupal', isLoggedIn, async function (req, res) {

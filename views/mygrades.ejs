@@ -1,8 +1,9 @@
 <div class="row justify-content-md-center">
     <div class="page header my-3 text-center">
-        <h1> <%= user.name.givenName %>
+        <h1>
+            <%= user.name.givenName %>
                 <%= user.name.familyName %>'s
-                Grades
+                    Grades
         </h1>
     </div>
     <div class="col-md-10 table-responsive-md text-center" id="grades">
@@ -27,7 +28,9 @@
                     <% for (subject of allSubjects) { %>
                         <tr>
                             <th>
-                               <a href="/account/course<%= subject.id %>" class=""> <%= subject.subject %> </a> 
+                                <a href="/account/course<%= subject.id %>" class="">
+                                    <%= subject.subject %>
+                                </a>
                             </th>
                             <% var totalgrade=0 %>
                                 <% for (item of subject.items) { if(item.percentage !=null){%>
@@ -35,12 +38,19 @@
                                         <% let total=0 %>
                                             <% let grade=0 %>
                                                 <% for(each of item.data) { %>
-                                                    <% for (usergrade of each.grades) { if (usergrade.user==user.googleId) {
-                                                        grade=grade + usergrade.grade }}%>
+                                                    <% for (usergrade of each.grades) { if
+                                                        (usergrade.user==user.googleId) { grade=grade + usergrade.grade
+                                                        }}%>
                                                         <% total=total + Number(each.total) %>
                                                             <% } %>
-                                                                <%= Math.round(grade*item.percentage/total) %>/
-                                                                    <%= item.percentage %>
+                                                                <% if(grade==0) {%>
+                                                                    <div class="text-muted">
+                                                                        <%= Math.round(grade/total*100) %>%
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        <%= Math.round(grade/total*100) %>%
+                                                                            <% } %>
+
                                     </td>
                                     <% totalgrade=totalgrade + (( grade / total) * item.percentage ); %>
                                         <% } else { %>

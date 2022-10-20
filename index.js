@@ -15,6 +15,7 @@ mongoose.connect(
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 app.use(express.json({ limit: '1mb' }))
+
 // settings
 const port = process.env.PORT
 app.use(expressLayouts);
