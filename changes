@@ -20,3 +20,6 @@ Error: session doesn't work. Cause: wrarp error
 
 v 1.0.14
 Error: Sign in keep reloading
+
+v 1.0.15
+Error: Sign out keep reloading
