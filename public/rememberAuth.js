@@ -42,15 +42,21 @@ setTimeout(function () {
         user_id == 'undefined' ||
         user_id == '' ||
         user_id == "''" ||
-        user_id == '""') &&
-        document.getElementById('myNaveNavBar').innerText == 'UPTP') return
+        user_id == '""') ||
+        document.getElementById('myNaveNavBar').innerText == 'UPTP') {
+        console.log("NOMAN 01")
+        return
+    }
     //Do not reload if user_id is settled and navbar does not says 'UPTP'
+    console.log("WTF bro 01")
     if (!(user_id == null ||
         user_id == undefined ||
         user_id == 'undefined' ||
         user_id == '' ||
         user_id == "''" ||
         user_id == '""') &&
-        document.getElementById('myNaveNavBar').innerText != 'UPTP') return
+        document.getElementById('myNaveNavBar').innerText != 'UPTP') {
+        return
+    }
     location.reload()
 }, 3000);

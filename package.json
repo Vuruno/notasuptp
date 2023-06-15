@@ -1,7 +1,7 @@
 {
   "name": "gradesuptp",
   "version": "1.0.12",
-  "description": "",
+  "description": "\"# gradesuptp\"",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,9 +30,19 @@
     "passport": "^0.5.2",
     "passport-google-oauth2": "^0.2.0",
     "passport-remember-me": "^0.0.1",
-    "web-push": "^3.4.5"
+    "web-push": "^3.4.5",
+    "yallist": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
-  }
+    "nodemon": "^2.0.22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vuruno/notasuptp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vuruno/notasuptp/issues"
+  },
+  "homepage": "https://github.com/Vuruno/notasuptp#readme",
+  "keywords": []
 }

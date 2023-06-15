@@ -10,8 +10,8 @@ const clientId = process.env.CAL_CLIENT_ID
 const clientSecret = process.env.CAL_CLIENT_SECRET
 const refreshToken = process.env.CAL_REFRESH_TOKEN
 
-const hw_cal = 'icehfm82elrc31e610rt7q25bs@group.calendar.google.com'
-const uptp_cal = 'pns03hvmc8vjar6525g38h32jk@group.calendar.google.com'
+const hw_cal = 'brunobordondiaz@gmail.com'
+const uptp_cal = 'icehfm82elrc31e610rt7q25bs@group.calendar.google.com'
 
 const { OAuth2 } = google.auth;
 const oAuth2Client = new OAuth2(clientId, clientSecret);
