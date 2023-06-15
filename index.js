@@ -26,7 +26,7 @@ app.set('view engine', 'ejs')
 // Express session
 app.use(session({
     secret: process.env.DB_SECRET,
-    resave: true,
+    resave: false,
     saveUninitialized: true
   })
 );

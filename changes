@@ -23,3 +23,6 @@ Error: Sign in keep reloading
 
 v 1.0.15
 Error: Sign out keep reloading
+
+v 1.0.16
+Error: isLoggedIn corrected

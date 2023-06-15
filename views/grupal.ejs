@@ -1,10 +1,11 @@
 <div class="row justify-content-md-center">
     <div class="page header my-3 text-center">
         <h1>
-            <%= subject.subject %> Grupal Grades 
-            <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'" onmouseout="set(this)" class="btn btn-sm btn-outline-light">
-                <i class="fas fa-link"></i> link
-            </div>
+            <%= subject.subject %> Grupal Grades
+                <div onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML = 'copied!'"
+                    onmouseout="set(this)" class="btn btn-sm btn-outline-light">
+                    <i class="fas fa-link"></i> link
+                </div>
         </h1>
     </div>
     <div class="col-lg table-responsive-md text-center" id="grades">
@@ -104,13 +105,15 @@
         </table>
     </div>
 </div>
+
 <hr>
-<canvas id=" myChart" class="mb-3"></canvas>
+<div class="row justify-content-md-center">
+<canvas id=" myChart"></canvas>
+</div>
 
 <script>
     var grades = [0, 0, 0, 0, 0, 0, 0]
     var nro = 1
-
     while (document.getElementById(`total_${nro}`) != null) {
         let nota = document.getElementById(`total_${nro}`).innerHTML
         if (Math.round(nota) >= 92) {
@@ -131,12 +134,10 @@
         nro++
     }
 
-    var ctx = document.getElementById(' myChart').getContext('2d'); Chart.defaults.global.defaultFontColor = 'white';
-    var myBubbleChart = new Chart(ctx, {
-        type: 'bar', data: {
-            datasets: [{
-                label: 'Grades', data: grades, backgroundColor: '#1565CF', borderWidth: 1
-            }],
+    var ctx = document.getElementById(' myChart').getContext('2d'); var myBubbleChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{ label: 'Grades', data: grades, backgroundColor: '#3E6B94', borderWidth:1 }],
             labels: ["D", "C", "C+", "B", "B+", "A", "A+"],
         }, options: {
             scales: {
@@ -147,17 +148,14 @@
                                 Math.max(...grades)
                         }
                     }]
-            }
-        }
-    })
-    
-    function randn_bm() {
-        var u = 0, v = 0;
-        while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-        while(v === 0) v = Math.random();
-        return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-    }
-
-    function set(that) {that.innerHTML = '<i class="fas fa-link"></i> link' }
-
-    </script>
+            },
+            responsive: false,
+        },
+        
+    }); function randn_bm() {
+        var u = 0, v = 0; while (u === 0)
+            u = Math.random(); //Converting [0,1) to (0,1) while(v===0) v=Math.random(); return
+        Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }; function set(that) {
+        that.innerHTML = '<i class="fas fa-link"></i> link'
+    } </script>

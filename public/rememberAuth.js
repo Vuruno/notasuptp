@@ -2,14 +2,11 @@
 let decodedCookie = document.cookie
 decodedCookie = decodedCookie.split(';')
 let settled = '', user_id = ''
-console.log(document.cookie)
 
 for (let x of decodedCookie) {
-    console.log(x)
     if (x.split('=')[0].includes('settled')) settled = Number(x.split('=')[1].split(';')[0])
     else if (x.split('=')[0].includes('user_id')) user_id = x.split('=')[1].split(';')[0]
 }
-console.log("!!decodedCookie")
 
 let currentUri = window.location.href
 currentUri = window.location.href.split(':')
@@ -46,9 +43,6 @@ setTimeout(function () {
         user_id == "''" ||
         user_id == '""')
     let navbar_uptp = document.getElementById('myNaveNavBar').innerText == 'UPTP'
-
-    console.log("user_id_settled",user_id_settled,"navbar_uptp",navbar_uptp)
-    console.log("!user_id_settled && navbar_uptp",!user_id_settled && navbar_uptp)
 
     //Do not reload if user_id is not settled and navbar says 'UPTP'
     if (!user_id_settled && navbar_uptp)

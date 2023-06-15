@@ -29,6 +29,8 @@ router.get('/logout', (req, res) => {
     req.logout();
     req.session = null;
 
+    res.setHeader('Set-Cookie', "settled=false; expires=Sat, 31 Dec 2022 23:59:59 GMT;path=https://uptp.glitch.me/")
+
     res.redirect('/welcome:logout');
 });
 
